@@ -129,3 +129,52 @@ if ($stmt->execute()) {
 
    ]);
 }
+$model = "openai/gpt-4.1";
+
+$type = "clinical_pathway";
+
+$response = json_encode($cp, JSON_UNESCAPED_UNICODE);
+
+$prompt = "CLINICAL_PROMPT";
+
+$stmtLog = $conn->prepare("
+
+INSERT INTO medical_ai_log(
+
+scribe_id,
+
+ai_model,
+
+ai_type,
+
+prompt,
+
+response
+
+)
+
+VALUES(
+
+?,?,?,?,?
+
+)
+
+");
+
+$stmtLog->bind_param(
+
+   "issss",
+
+   $scribe_id,
+
+   $model,
+
+   $type,
+
+   $prompt,
+
+   $response
+
+);
+
+$stmtLog->execute();

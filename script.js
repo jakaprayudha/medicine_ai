@@ -286,7 +286,7 @@ btnProcess.onclick = async () => {
 
         temperature: 0,
 
-        max_tokens: 1500,
+        max_tokens: 600,
 
         messages: [
           {

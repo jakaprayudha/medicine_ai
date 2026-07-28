@@ -137,3 +137,79 @@ echo json_encode([
    "uuid" => $uuid
 
 ]);
+$stmtVoice = $conn->prepare("
+
+INSERT INTO medical_voice(
+
+scribe_id,
+
+transcript
+
+)
+
+VALUES(
+
+?,?
+
+)
+
+");
+
+$stmtVoice->bind_param(
+
+   "is",
+
+   $id,
+
+   $transcript
+
+);
+
+$stmtVoice->execute();
+$rme_json = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+$stmtLog = $conn->prepare("
+
+INSERT INTO medical_ai_log(
+
+scribe_id,
+
+ai_model,
+
+ai_type,
+
+prompt,
+
+response
+
+)
+
+VALUES(
+
+?,?,?,?,?
+
+)
+
+");
+
+$type = "medical_scribe";
+
+$prompt = "SYSTEM_PROMPT";
+
+$stmtLog->bind_param(
+
+   "issss",
+
+   $id,
+
+   $model,
+
+   $type,
+
+   $prompt,
+
+   $rme_json
+
+);
+
+$stmtLog->execute();

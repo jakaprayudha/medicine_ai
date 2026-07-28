@@ -30,8 +30,6 @@ const txtTranscript = document.getElementById("transcript");
 
 const status = document.getElementById("status");
 
-const dot = document.querySelector(".dot");
-
 const btnStart = document.getElementById("start");
 
 const btnStop = document.getElementById("stop");
@@ -69,7 +67,7 @@ recognition.interimResults = true;
 
 btnStart.onclick = () => {
   if (recognitionRunning) return;
-
+  startVoiceUI();
   finalTranscript = "";
   interimTranscript = "";
 
@@ -91,6 +89,8 @@ btnStop.onclick = () => {
     recognition.stop();
   } catch (e) {
     console.log(e);
+
+    stopVoiceUI();
   }
 };
 
@@ -112,6 +112,8 @@ recognition.onstart = () => {
 
 recognition.onend = () => {
   recognitionRunning = false;
+
+  stopVoiceUI();
 
   if (isRecording) {
     status.innerHTML = "🔄 Menyambungkan ulang...";
@@ -608,4 +610,44 @@ async function saveClinical(scribeID) {
   const result = await response.json();
 
   console.log(result);
+}
+
+let second = 0;
+
+let timer = null;
+
+const wave = document.getElementById("wave");
+
+const timerText = document.getElementById("recordTime");
+
+const dot = document.querySelector(".dot");
+
+function startVoiceUI() {
+  second = 0;
+
+  timerText.innerHTML = "00:00";
+
+  wave.classList.add("active");
+
+  dot.classList.add("recording");
+
+  clearInterval(timer);
+
+  timer = setInterval(() => {
+    second++;
+
+    const m = String(Math.floor(second / 60)).padStart(2, "0");
+
+    const s = String(second % 60).padStart(2, "0");
+
+    timerText.innerHTML = `${m}:${s}`;
+  }, 1000);
+}
+
+function stopVoiceUI() {
+  clearInterval(timer);
+
+  wave.classList.remove("active");
+
+  dot.classList.remove("recording");
 }

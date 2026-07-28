@@ -17,11 +17,9 @@ const API_KEY = "Bearer " + window.APP_CONFIG.OPENROUTER_KEY;
 
 let rmeData = null;
 let clinicalData = null;
-
-let transcript = "";
-
+let finalTranscript = "";
+let interimTranscript = "";
 let isRecording = false;
-
 let recognitionRunning = false;
 
 //==============================
@@ -72,17 +70,14 @@ recognition.interimResults = true;
 btnStart.onclick = () => {
   if (recognitionRunning) return;
 
-  transcript = "";
+  finalTranscript = "";
+  interimTranscript = "";
 
   txtTranscript.value = "";
 
   isRecording = true;
 
-  try {
-    recognition.start();
-  } catch (e) {
-    console.log(e);
-  }
+  recognition.start();
 };
 
 //==============================
@@ -163,13 +158,19 @@ recognition.onerror = (event) => {
 //==============================
 
 recognition.onresult = (event) => {
+  interimTranscript = "";
+
   for (let i = event.resultIndex; i < event.results.length; i++) {
+    const text = event.results[i][0].transcript;
+
     if (event.results[i].isFinal) {
-      transcript += event.results[i][0].transcript + "\n";
+      finalTranscript += text + " ";
+    } else {
+      interimTranscript += text;
     }
   }
 
-  txtTranscript.value = transcript;
+  txtTranscript.value = finalTranscript + interimTranscript;
 };
 
 //==============================

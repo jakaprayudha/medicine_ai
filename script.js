@@ -1,3 +1,16 @@
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  showClass: {
+    popup: "animate__animated animate__fadeInRight",
+  },
+  hideClass: {
+    popup: "animate__animated animate__fadeOutRight",
+  },
+});
 //=====================================================
 // AI MEDICAL SCRIBE
 // PART 1
@@ -262,12 +275,22 @@ Format:
 
 btnProcess.onclick = async () => {
   if (!txtTranscript.value.trim()) {
-    alert("Belum ada percakapan.");
+    Toast.fire({
+      icon: "warning",
+      title: "Belum ada percakapan yang direkam.",
+    });
 
     return;
   }
 
-  status.innerHTML = "🤖 AI sedang menganalisa...";
+  Swal.fire({
+    title: "AI Medical Scribe",
+    text: "Sedang menganalisa percakapan...",
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
 
   try {
     const response = await fetch(OPENROUTER_API, {
@@ -307,6 +330,7 @@ btnProcess.onclick = async () => {
     });
 
     const result = await response.json();
+    swal.close();
 
     console.log(result);
 
@@ -347,7 +371,10 @@ btnProcess.onclick = async () => {
   } catch (err) {
     console.error(err);
 
-    alert(err.message);
+    Toast.fire({
+      icon: "error",
+      title: err.message,
+    });
   }
 };
 
@@ -575,7 +602,10 @@ async function saveRME() {
 
     await saveClinical(scribeID);
 
-    alert("✅ Berhasil disimpan");
+    Toast.fire({
+      icon: "success",
+      title: "Rekam medis berhasil disimpan.",
+    });
   } catch (e) {
     console.log(e);
 

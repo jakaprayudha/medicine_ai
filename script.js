@@ -526,3 +526,86 @@ function isiList(id, data) {
     }
   });
 }
+
+const btnSave = document.getElementById("saveBtn");
+
+btnSave.onclick = saveRME;
+async function saveRME() {
+  btnSave.disabled = true;
+  btnSave.innerHTML = "💾 Menyimpan...";
+
+  try {
+    // tambahkan transcript ke object
+    rmeData.transcript = txtTranscript.value;
+
+    const response = await fetch("api/save_rme.php", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(rmeData),
+    });
+
+    const result = await response.json();
+
+    console.log(result);
+
+    if (!result.success) {
+      alert(result.message);
+
+      btnSave.disabled = false;
+      btnSave.innerHTML = "💾 Simpan ke RME";
+
+      return;
+    }
+
+    //---------------------------------
+    // simpan id hasil insert
+    //---------------------------------
+
+    const scribeID = result.scribe_id;
+
+    //---------------------------------
+    // simpan clinical
+    //---------------------------------
+
+    await saveClinical(scribeID);
+
+    alert("✅ Berhasil disimpan");
+  } catch (e) {
+    console.log(e);
+
+    alert(e.message);
+  }
+
+  btnSave.disabled = false;
+
+  btnSave.innerHTML = "💾 Simpan ke RME";
+}
+async function saveClinical(scribeID) {
+  const body = {
+    scribe_id: scribeID,
+
+    clinical: clinicalData,
+  };
+
+  const response = await fetch(
+    "api/save_clinical.php",
+
+    {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(body),
+    },
+  );
+
+  const result = await response.json();
+
+  console.log(result);
+}

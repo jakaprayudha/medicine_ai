@@ -451,7 +451,6 @@ document.getElementById("clinicalBtn").onclick = async () => {
           ],
         }),
       },
-      itu,
     );
 
     const result = await response.json();

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Register | AI Medical Scribe</title>
+
+    <!-- Google Font -->
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap Icon -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+
+    <link rel="stylesheet" href="register.css" />
+  </head>
+
+  <body>
+    <!-- Animated Background -->
+
+    <div class="bg-circle circle1"></div>
+
+    <div class="bg-circle circle2"></div>
+
+    <div class="bg-circle circle3"></div>
+
+    <section class="register-page">
+      <!-- LEFT -->
+
+      <div class="register-left">
+        <div class="logo">🩺</div>
+
+        <h1>AI Medical Scribe</h1>
+
+        <p>
+          Artificial Intelligence<br />
+
+          Electronic Medical Record Platform
+        </p>
+
+        <div class="illustration">
+          <img
+            src="https://undraw.co/api/illustrations/doctor.svg"
+            alt="AI Medical"
+          />
+        </div>
+
+        <div class="feature">
+          <div>🤖 AI Medical Documentation</div>
+
+          <div>🎤 Voice Recognition</div>
+
+          <div>🩺 Clinical Decision Support</div>
+
+          <div>🏥 Hospital Information System</div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="register-right">
+        <div class="register-card">
+          <span class="badge"> Enterprise Edition </span>
+
+          <h2>Create Account</h2>
+
+          <p>Join AI Medical Scribe Platform</p>
+
+          <form id="registerForm">
+            <div class="row">
+              <div class="col">
+                <label> Full Name </label>
+
+                <div class="input-group">
+                  <i class="bi bi-person"></i>
+
+                  <input type="text" placeholder="Full Name" />
+                </div>
+              </div>
+
+              <div class="col">
+                <label> Email </label>
+
+                <div class="input-group">
+                  <i class="bi bi-envelope"></i>
+
+                  <input type="email" placeholder="Email" />
+                </div>
+              </div>
+            </div>
+
+            <label> Hospital </label>
+
+            <div class="input-group">
+              <i class="bi bi-hospital"></i>
+
+              <input type="text" placeholder="Hospital Name" />
+            </div>
+
+            <label> Profession </label>
+
+            <div class="input-group">
+              <i class="bi bi-person-badge"></i>
+
+              <select>
+                <option>Select Profession</option>
+
+                <option>Doctor</option>
+
+                <option>Nurse</option>
+
+                <option>Pharmacist</option>
+
+                <option>Laboratory</option>
+
+                <option>Radiographer</option>
+
+                <option>Administrator</option>
+
+                <option>Hospital Management</option>
+              </select>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label> Username </label>
+
+                <div class="input-group">
+                  <i class="bi bi-person-circle"></i>
+
+                  <input type="text" placeholder="Username" />
+                </div>
+              </div>
+
+              <div class="col">
+                <label> Phone </label>
+
+                <div class="input-group">
+                  <i class="bi bi-telephone"></i>
+
+                  <input type="text" placeholder="Phone" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label> Password </label>
+
+                <div class="input-group">
+                  <i class="bi bi-lock"></i>
+
+                  <input id="password" type="password" placeholder="Password" />
+
+                  <i id="togglePassword" class="bi bi-eye eye"></i>
+                </div>
+              </div>
+
+              <div class="col">
+                <label> Confirm Password </label>
+
+                <div class="input-group">
+                  <i class="bi bi-lock-fill"></i>
+
+                  <input
+                    id="confirmPassword"
+                    type="password"
+                    placeholder="Confirm Password"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Password Strength -->
+
+            <div class="strength">
+              <div class="bar">
+                <span id="strengthBar"></span>
+              </div>
+
+              <small id="strengthText"> Password Strength </small>
+            </div>
+
+            <label class="remember">
+              <input type="checkbox" />
+
+              I agree to the Terms & Privacy Policy
+            </label>
+
+            <button type="submit" class="register-btn">
+              <i class="bi bi-person-plus-fill"></i>
+
+              Create Account
+            </button>
+          </form>
+
+          <div class="divider">
+            <span> OR </span>
+          </div>
+
+          <button class="social google">
+            <i class="bi bi-google"></i>
+
+            Continue with Google
+          </button>
+
+          <button class="social microsoft">
+            <i class="bi bi-microsoft"></i>
+
+            Continue with Microsoft
+          </button>
+
+          <div class="login-link">
+            Already have an account?
+
+            <a href="login.html"> Sign In </a>
+          </div>
+
+          <div class="footer">Version 1.0 Enterprise</div>
+        </div>
+      </div>
+    </section>
+
+    <script src="register.js"></script>
+  </body>
+</html>

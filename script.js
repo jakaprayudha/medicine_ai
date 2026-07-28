@@ -436,7 +436,7 @@ document.getElementById("clinicalBtn").onclick = async () => {
 
           temperature: 0,
 
-          max_tokens: 1200,
+          max_tokens: 800,
 
           messages: [
             {
@@ -451,6 +451,7 @@ document.getElementById("clinicalBtn").onclick = async () => {
           ],
         }),
       },
+      itu,
     );
 
     const result = await response.json();

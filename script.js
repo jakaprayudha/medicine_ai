@@ -407,7 +407,7 @@ document.getElementById("clinicalBtn").onclick = async () => {
 
           temperature: 0,
 
-          max_tokens: 2000,
+          max_tokens: 1200,
 
           messages: [
             {

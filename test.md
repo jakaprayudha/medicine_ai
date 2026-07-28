@@ -1,0 +1,1 @@
+demam terjadi dua hari agak pusing terus dari penyakit ada sesak dan jantung alergi parasetamol dan protein pembesar fisik tekanan darah 170/80 nadi 90 respirasi 30 suhu 37,5 SPU 100% rencana rawat inap

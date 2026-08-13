@@ -1,0 +1,2292 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Claim OCR Screening</title>
+
+    <style>
+      /* =========================================================
+   ROOT
+========================================================= */
+
+      :root {
+        --primary: #4f46e5;
+        --primary-light: #eef2ff;
+        --primary-dark: #3730a3;
+
+        --cyan: #0891b2;
+
+        --success: #16a34a;
+        --success-bg: #f0fdf4;
+
+        --warning: #d97706;
+        --warning-bg: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-bg: #fef2f2;
+
+        --dark: #172033;
+        --text: #334155;
+        --muted: #64748b;
+
+        --border: #e2e8f0;
+        --bg: #f7f8fc;
+        --white: #ffffff;
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Arial,
+          sans-serif;
+
+        background: var(--bg);
+
+        color: var(--text);
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      .header {
+        height: 70px;
+
+        background: white;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 30px;
+
+        position: sticky;
+
+        top: 0;
+
+        z-index: 50;
+      }
+
+      .brand {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 40px;
+        height: 40px;
+
+        border-radius: 11px;
+
+        background: linear-gradient(135deg, #4f46e5, #0891b2);
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-weight: 800;
+
+        font-size: 17px;
+      }
+
+      .brand-name {
+        font-size: 16px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .brand-sub {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .header-right {
+        display: flex;
+
+        align-items: center;
+
+        gap: 20px;
+      }
+
+      .ai-online {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        font-size: 12px;
+
+        font-weight: 650;
+
+        color: var(--success);
+      }
+
+      .online-dot {
+        width: 8px;
+        height: 8px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+
+        box-shadow: 0 0 0 4px #dcfce7;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #e0e7ff;
+
+        color: #4338ca;
+
+        font-weight: 700;
+
+        font-size: 13px;
+      }
+
+      /* =========================================================
+   PAGE
+========================================================= */
+
+      .page {
+        max-width: 1500px;
+
+        margin: auto;
+
+        padding: 28px 30px 50px;
+      }
+
+      .page-heading {
+        margin-bottom: 24px;
+      }
+
+      .page-heading h1 {
+        margin: 0;
+
+        font-size: 24px;
+
+        color: var(--dark);
+      }
+
+      .page-heading p {
+        margin: 7px 0 0;
+
+        color: var(--muted);
+
+        font-size: 13px;
+      }
+
+      /* =========================================================
+   STEP BAR
+========================================================= */
+
+      .workflow {
+        display: flex;
+
+        align-items: center;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 14px;
+
+        padding: 15px 20px;
+
+        margin-bottom: 22px;
+      }
+
+      .step {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        flex: 1;
+
+        position: relative;
+      }
+
+      .step:not(:last-child)::after {
+        content: "";
+
+        height: 1px;
+
+        background: #e2e8f0;
+
+        position: absolute;
+
+        left: 105px;
+
+        right: 20px;
+
+        top: 16px;
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 50%;
+
+        background: #f1f5f9;
+
+        color: #64748b;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 12px;
+
+        font-weight: 750;
+
+        z-index: 2;
+      }
+
+      .step.active .step-number {
+        background: var(--primary);
+
+        color: white;
+      }
+
+      .step.done .step-number {
+        background: #dcfce7;
+
+        color: #15803d;
+      }
+
+      .step-text {
+        font-size: 11px;
+
+        font-weight: 650;
+
+        color: #64748b;
+      }
+
+      .step.active .step-text {
+        color: var(--primary);
+      }
+
+      /* =========================================================
+   SELECT PATIENT
+========================================================= */
+
+      .patient-selector {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 15px;
+
+        padding: 20px;
+
+        margin-bottom: 20px;
+      }
+
+      .selector-top {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 15px;
+      }
+
+      .selector-title {
+        font-size: 14px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .selector-description {
+        font-size: 11px;
+
+        color: var(--muted);
+
+        margin-top: 4px;
+      }
+
+      .selector-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr
+          1fr
+          auto;
+
+        gap: 12px;
+      }
+
+      .field label {
+        display: block;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        color: var(--muted);
+
+        margin-bottom: 6px;
+      }
+
+      .field select {
+        width: 100%;
+
+        height: 42px;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 8px;
+
+        padding: 0 11px;
+
+        background: white;
+
+        color: var(--text);
+
+        outline: none;
+      }
+
+      .field select:focus {
+        border-color: var(--primary);
+      }
+
+      .btn {
+        border: none;
+
+        border-radius: 8px;
+
+        padding: 0 19px;
+
+        height: 42px;
+
+        cursor: pointer;
+
+        font-weight: 650;
+
+        font-size: 12px;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-outline {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        color: var(--text);
+      }
+
+      /* =========================================================
+   PATIENT MINI INFO
+========================================================= */
+
+      .patient-mini {
+        display: none;
+
+        margin-top: 15px;
+
+        border-top: 1px solid var(--border);
+
+        padding-top: 15px;
+      }
+
+      .patient-mini.show {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .patient-left {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .patient-photo {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 10px;
+
+        background: #eef2ff;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 18px;
+      }
+
+      .patient-name {
+        font-weight: 750;
+
+        color: var(--dark);
+
+        font-size: 13px;
+      }
+
+      .patient-detail {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .patient-tags {
+        display: flex;
+
+        gap: 6px;
+      }
+
+      .tag {
+        padding: 5px 8px;
+
+        border-radius: 20px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+      }
+
+      .tag-blue {
+        background: #eef2ff;
+
+        color: #4338ca;
+      }
+
+      .tag-green {
+        background: #f0fdf4;
+
+        color: #15803d;
+      }
+
+      /* =========================================================
+   MAIN WORKSPACE
+========================================================= */
+
+      .workspace {
+        display: grid;
+
+        grid-template-columns:
+          0.9fr
+          1.1fr;
+
+        gap: 20px;
+      }
+
+      /* =========================================================
+   UPLOAD PANEL
+========================================================= */
+
+      .upload-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 15px;
+
+        overflow: hidden;
+      }
+
+      .card-head {
+        padding: 17px 20px;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .card-title {
+        font-size: 14px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .card-sub {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      /* =========================================================
+   UPLOAD ZONE
+========================================================= */
+
+      .upload-zone {
+        border: 2px dashed #c7d2fe;
+
+        background: #fafaff;
+
+        border-radius: 13px;
+
+        min-height: 260px;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+
+        padding: 25px;
+      }
+
+      .upload-zone:hover {
+        border-color: var(--primary);
+
+        background: #f8f8ff;
+      }
+
+      .upload-zone.drag {
+        border-color: var(--primary);
+
+        background: #eef2ff;
+      }
+
+      .upload-icon {
+        width: 58px;
+        height: 58px;
+
+        border-radius: 14px;
+
+        background: #eef2ff;
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 25px;
+
+        margin-bottom: 13px;
+      }
+
+      .upload-title {
+        font-size: 14px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .upload-text {
+        font-size: 11px;
+
+        color: var(--muted);
+
+        margin-top: 6px;
+
+        line-height: 1.6;
+      }
+
+      .upload-format {
+        margin-top: 12px;
+
+        font-size: 10px;
+
+        color: #94a3b8;
+      }
+
+      /* =========================================================
+   FILE PREVIEW
+========================================================= */
+
+      .file-preview {
+        display: none;
+
+        border: 1px solid var(--border);
+
+        border-radius: 10px;
+
+        padding: 12px;
+
+        margin-top: 15px;
+      }
+
+      .file-preview.show {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .file-info {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+      }
+
+      .pdf-icon {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 8px;
+
+        background: #fee2e2;
+
+        color: #dc2626;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 12px;
+
+        font-weight: 800;
+      }
+
+      .file-name {
+        font-size: 11px;
+
+        font-weight: 700;
+
+        color: var(--dark);
+      }
+
+      .file-size {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .remove-file {
+        border: none;
+
+        background: none;
+
+        color: #94a3b8;
+
+        cursor: pointer;
+
+        font-size: 17px;
+      }
+
+      /* =========================================================
+   SCREENING
+========================================================= */
+
+      .screening {
+        display: none;
+
+        margin-top: 15px;
+      }
+
+      .screening.show {
+        display: block;
+      }
+
+      .screening-header {
+        display: flex;
+
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+      }
+
+      .screening-title {
+        font-size: 11px;
+
+        font-weight: 700;
+
+        color: var(--dark);
+      }
+
+      .screening-percent {
+        font-size: 11px;
+
+        font-weight: 750;
+
+        color: var(--primary);
+      }
+
+      .screening-track {
+        height: 7px;
+
+        background: #e2e8f0;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+      }
+
+      .screening-progress {
+        height: 100%;
+
+        width: 0%;
+
+        background: linear-gradient(90deg, #4f46e5, #0891b2);
+
+        transition: width 0.25s;
+      }
+
+      .screening-log {
+        margin-top: 10px;
+
+        min-height: 70px;
+
+        background: #0f172a;
+
+        color: #94a3b8;
+
+        border-radius: 8px;
+
+        padding: 10px;
+
+        font-family: "SFMono-Regular", Consolas, monospace;
+
+        font-size: 9px;
+
+        line-height: 1.7;
+      }
+
+      .log-active {
+        color: #67e8f9;
+      }
+
+      /* =========================================================
+   RIGHT RESULT PANEL
+========================================================= */
+
+      .result-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 15px;
+
+        overflow: hidden;
+      }
+
+      .result-empty {
+        min-height: 530px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        text-align: center;
+
+        padding: 40px;
+      }
+
+      .empty-icon {
+        width: 70px;
+        height: 70px;
+
+        margin: auto;
+
+        border-radius: 18px;
+
+        background: #f1f5f9;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 28px;
+
+        color: #94a3b8;
+      }
+
+      .empty-title {
+        margin-top: 15px;
+
+        font-size: 14px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .empty-text {
+        margin-top: 6px;
+
+        font-size: 11px;
+
+        color: var(--muted);
+
+        line-height: 1.6;
+      }
+
+      /* =========================================================
+   RESULT
+========================================================= */
+
+      .result-content {
+        display: none;
+      }
+
+      .result-content.show {
+        display: block;
+      }
+
+      .result-header {
+        padding: 17px 20px;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .result-header-title {
+        font-size: 14px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .result-header-sub {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .ai-badge {
+        padding: 6px 9px;
+
+        border-radius: 20px;
+
+        background: #eef2ff;
+
+        color: #4338ca;
+
+        font-size: 10px;
+
+        font-weight: 750;
+      }
+
+      /* =========================================================
+   RESULT BODY
+========================================================= */
+
+      .result-body {
+        padding: 20px;
+      }
+
+      /* =========================================================
+   EXTRACTION SUMMARY
+========================================================= */
+
+      .extraction {
+        background: linear-gradient(135deg, #eef2ff, #ecfeff);
+
+        border: 1px solid #c7d2fe;
+
+        border-radius: 11px;
+
+        padding: 15px;
+
+        margin-bottom: 18px;
+      }
+
+      .extraction-top {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+      }
+
+      .extraction-title {
+        font-size: 12px;
+
+        font-weight: 750;
+
+        color: #312e81;
+      }
+
+      .extraction-count {
+        font-size: 10px;
+
+        color: #4338ca;
+
+        font-weight: 700;
+      }
+
+      .extraction-text {
+        margin-top: 7px;
+
+        font-size: 10px;
+
+        line-height: 1.6;
+
+        color: #475569;
+      }
+
+      /* =========================================================
+   DIAGNOSIS
+========================================================= */
+
+      .section-title {
+        font-size: 10px;
+
+        font-weight: 800;
+
+        color: #64748b;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+
+        margin-bottom: 9px;
+      }
+
+      .diagnosis-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr;
+
+        gap: 9px;
+
+        margin-bottom: 20px;
+      }
+
+      .diagnosis-item {
+        border: 1px solid var(--border);
+
+        border-radius: 9px;
+
+        padding: 11px;
+      }
+
+      .diagnosis-top {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+      }
+
+      .diagnosis-name {
+        font-size: 11px;
+
+        font-weight: 700;
+
+        color: var(--dark);
+      }
+
+      .icd-code {
+        font-size: 9px;
+
+        padding: 4px 6px;
+
+        border-radius: 5px;
+
+        background: #f1f5f9;
+
+        color: #475569;
+
+        font-weight: 700;
+      }
+
+      .diagnosis-confidence {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 6px;
+      }
+
+      /* =========================================================
+   CLAIM CHECKS
+========================================================= */
+
+      .check-list {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        margin-bottom: 20px;
+      }
+
+      .check-item {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 11px 12px;
+
+        border-radius: 9px;
+
+        background: #f8fafc;
+      }
+
+      .check-left {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+      }
+
+      .check-icon {
+        width: 25px;
+        height: 25px;
+
+        border-radius: 7px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 11px;
+
+        font-weight: 800;
+      }
+
+      .check-success {
+        background: #dcfce7;
+
+        color: #15803d;
+      }
+
+      .check-warning {
+        background: #fef3c7;
+
+        color: #b45309;
+      }
+
+      .check-danger {
+        background: #fee2e2;
+
+        color: #b91c1c;
+      }
+
+      .check-name {
+        font-size: 10px;
+
+        font-weight: 700;
+
+        color: var(--dark);
+      }
+
+      .check-detail {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .check-status {
+        font-size: 9px;
+
+        font-weight: 750;
+      }
+
+      /* =========================================================
+   AI RECOMMENDATION
+========================================================= */
+
+      .ai-recommendation {
+        border: 1px solid var(--border);
+
+        border-radius: 11px;
+
+        overflow: hidden;
+
+        margin-bottom: 18px;
+      }
+
+      .ai-rec-header {
+        padding: 12px 14px;
+
+        background: #f8fafc;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .ai-rec-title {
+        font-size: 11px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .ai-rec-body {
+        padding: 13px;
+      }
+
+      .rec {
+        padding: 11px 12px;
+
+        border-radius: 8px;
+
+        margin-bottom: 8px;
+
+        border-left: 3px solid;
+      }
+
+      .rec:last-child {
+        margin-bottom: 0;
+      }
+
+      .rec.success {
+        background: var(--success-bg);
+
+        border-color: #22c55e;
+      }
+
+      .rec.warning {
+        background: var(--warning-bg);
+
+        border-color: #f59e0b;
+      }
+
+      .rec.danger {
+        background: var(--danger-bg);
+
+        border-color: #ef4444;
+      }
+
+      .rec-title {
+        font-size: 10px;
+
+        font-weight: 750;
+      }
+
+      .rec-text {
+        font-size: 9px;
+
+        color: #64748b;
+
+        line-height: 1.6;
+
+        margin-top: 3px;
+      }
+
+      /* =========================================================
+   SCORE
+========================================================= */
+
+      .readiness {
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+
+        padding: 14px;
+
+        border-radius: 10px;
+
+        background: #f8fafc;
+      }
+
+      .readiness-circle {
+        width: 64px;
+        height: 64px;
+
+        border-radius: 50%;
+
+        border: 6px solid #22c55e;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 15px;
+
+        font-weight: 800;
+
+        color: #15803d;
+
+        flex-shrink: 0;
+      }
+
+      .readiness-title {
+        font-size: 11px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .readiness-text {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 4px;
+
+        line-height: 1.5;
+      }
+
+      /* =========================================================
+   RESULT FOOTER
+========================================================= */
+
+      .result-actions {
+        display: flex;
+
+        justify-content: flex-end;
+
+        gap: 8px;
+
+        margin-top: 18px;
+      }
+
+      .btn-success {
+        background: var(--success);
+
+        color: white;
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 1050px) {
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .selector-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .workflow {
+          overflow: auto;
+        }
+
+        .step {
+          min-width: 150px;
+        }
+
+        .diagnosis-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        .page {
+          padding: 20px 15px 40px;
+        }
+
+        .header {
+          padding: 0 15px;
+        }
+
+        .header .ai-online {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =========================================================
+     HEADER
+========================================================= -->
+
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">AI</div>
+
+        <div>
+          <div class="brand-name">AI Claim Document Intelligence</div>
+
+          <div class="brand-sub">
+            OCR • Clinical Extraction • Claim Screening
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="ai-online">
+          <span class="online-dot"></span>
+
+          AI Engine Online
+        </div>
+
+        <div class="avatar">A</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <!-- =========================================================
+     TITLE
+========================================================= -->
+
+      <section class="page-heading">
+        <h1>AI Claim OCR Screening</h1>
+
+        <p>
+          Upload dokumen pelayanan pasien untuk dilakukan OCR, ekstraksi
+          informasi klinis dan analisis kesiapan klaim.
+        </p>
+      </section>
+
+      <!-- =========================================================
+     WORKFLOW
+========================================================= -->
+
+      <div class="workflow">
+        <div class="step active" id="step1">
+          <div class="step-number">1</div>
+
+          <div class="step-text">Pilih Visit</div>
+        </div>
+
+        <div class="step" id="step2">
+          <div class="step-number">2</div>
+
+          <div class="step-text">Upload PDF</div>
+        </div>
+
+        <div class="step" id="step3">
+          <div class="step-number">3</div>
+
+          <div class="step-text">AI Screening</div>
+        </div>
+
+        <div class="step" id="step4">
+          <div class="step-number">4</div>
+
+          <div class="step-text">Claim Result</div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+     PATIENT SELECTOR
+========================================================= -->
+
+      <section class="patient-selector">
+        <div class="selector-top">
+          <div>
+            <div class="selector-title">Pilih Episode Pelayanan</div>
+
+            <div class="selector-description">
+              Pilih nomor visit yang akan digunakan untuk proses OCR dan claim
+              screening.
+            </div>
+          </div>
+        </div>
+
+        <div class="selector-grid">
+          <div class="field">
+            <label> Nomor Visit </label>
+
+            <select id="visitSelect">
+              <option value="">-- Pilih Nomor Visit --</option>
+
+              <option value="VST-20260813-001">VST-20260813-001</option>
+
+              <option value="VST-20260813-002">VST-20260813-002</option>
+
+              <option value="VST-20260813-003">VST-20260813-003</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label> Pasien </label>
+
+            <select id="patientSelect">
+              <option value="">-- Pilih Pasien --</option>
+
+              <option value="ahmad">Ahmad Fauzan</option>
+
+              <option value="budi">Budi Santoso</option>
+
+              <option value="siti">Siti Rahma</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label> Episode </label>
+
+            <select>
+              <option>Rawat Inap</option>
+
+              <option>Rawat Jalan</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" onclick="selectVisit()">
+            Lanjutkan
+          </button>
+        </div>
+
+        <!-- PATIENT INFO -->
+
+        <div class="patient-mini" id="patientMini">
+          <div class="patient-left">
+            <div class="patient-photo">👤</div>
+
+            <div>
+              <div class="patient-name" id="miniName">Ahmad Fauzan</div>
+
+              <div class="patient-detail" id="miniDetail">
+                RM 00-12-45-78 • VST-20260813-001 • dr. Andi Pratama
+              </div>
+            </div>
+          </div>
+
+          <div class="patient-tags">
+            <span class="tag tag-green"> BPJS </span>
+
+            <span class="tag tag-blue"> RME Available </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     WORKSPACE
+========================================================= -->
+
+      <section class="workspace">
+        <!-- =========================================================
+     LEFT — UPLOAD
+========================================================= -->
+
+        <div class="upload-card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Upload Dokumen</div>
+
+              <div class="card-sub">
+                Dokumen pelayanan yang akan dianalisis AI
+              </div>
+            </div>
+
+            <span class="tag tag-blue"> OCR AI </span>
+          </div>
+
+          <div class="card-body">
+            <!-- UPLOAD -->
+
+            <div
+              class="upload-zone"
+              id="uploadZone"
+              onclick="document.getElementById('pdfInput').click()"
+            >
+              <div class="upload-icon">📄</div>
+
+              <div class="upload-title">Upload Dokumen PDF</div>
+
+              <div class="upload-text">
+                Klik untuk memilih file atau drag & drop dokumen ke area ini.
+
+                <br />
+
+                AI akan melakukan OCR dan clinical information extraction.
+              </div>
+
+              <div class="upload-format">PDF • Maks. 10 MB</div>
+
+              <input
+                type="file"
+                id="pdfInput"
+                accept=".pdf,application/pdf"
+                hidden
+                onchange="handleFile(this.files[0])"
+              />
+            </div>
+
+            <!-- FILE PREVIEW -->
+
+            <div class="file-preview" id="filePreview">
+              <div class="file-info">
+                <div class="pdf-icon">PDF</div>
+
+                <div>
+                  <div class="file-name" id="fileName">
+                    Resume_Medis_Ahmad.pdf
+                  </div>
+
+                  <div class="file-size" id="fileSize">1.24 MB</div>
+                </div>
+              </div>
+
+              <button class="remove-file" onclick="removeFile(event)">×</button>
+            </div>
+
+            <!-- SCREENING -->
+
+            <div class="screening" id="screening">
+              <div class="screening-header">
+                <div class="screening-title">AI Document Screening</div>
+
+                <div class="screening-percent" id="screeningPercent">0%</div>
+              </div>
+
+              <div class="screening-track">
+                <div class="screening-progress" id="screeningProgress"></div>
+              </div>
+
+              <div class="screening-log" id="screeningLog">
+                <div class="log-active">Waiting for document...</div>
+              </div>
+            </div>
+
+            <!-- SCREEN BUTTON -->
+
+            <div
+              style="margin-top: 15px; display: flex; justify-content: flex-end"
+            >
+              <button
+                class="btn btn-primary"
+                id="screenButton"
+                disabled
+                onclick="startScreening()"
+              >
+                ✨ Start AI Screening
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- =========================================================
+     RIGHT — RESULT
+========================================================= -->
+
+        <div class="result-card">
+          <!-- EMPTY -->
+
+          <div class="result-empty" id="resultEmpty">
+            <div>
+              <div class="empty-icon">✦</div>
+
+              <div class="empty-title">Menunggu AI Screening</div>
+
+              <div class="empty-text">
+                Pilih visit pasien, upload dokumen PDF, kemudian jalankan AI
+                Screening.
+
+                <br /><br />
+
+                Hasil diagnosis dan rekomendasi claim akan muncul di panel ini.
+              </div>
+            </div>
+          </div>
+
+          <!-- RESULT -->
+
+          <div class="result-content" id="resultContent">
+            <div class="result-header">
+              <div>
+                <div class="result-header-title">AI Clinical Extraction</div>
+
+                <div class="result-header-sub">
+                  Hasil analisis dokumen pelayanan
+                </div>
+              </div>
+
+              <span class="ai-badge"> AI VERIFIED </span>
+            </div>
+
+            <div class="result-body">
+              <!-- EXTRACTION -->
+
+              <div class="extraction">
+                <div class="extraction-top">
+                  <div class="extraction-title">
+                    ✓ Dokumen berhasil dianalisis
+                  </div>
+
+                  <div class="extraction-count">96.4% Confidence</div>
+                </div>
+
+                <div class="extraction-text">
+                  AI berhasil mengekstraksi informasi klinis dari dokumen dan
+                  melakukan pencocokan terhadap episode pelayanan pasien.
+                </div>
+              </div>
+
+              <!-- DIAGNOSIS -->
+
+              <div class="section-title">Diagnosis Terdeteksi</div>
+
+              <div class="diagnosis-grid">
+                <div class="diagnosis-item">
+                  <div class="diagnosis-top">
+                    <div class="diagnosis-name">Pneumonia, unspecified</div>
+
+                    <div class="icd-code">J18.9</div>
+                  </div>
+
+                  <div class="diagnosis-confidence">AI Confidence: 97%</div>
+                </div>
+
+                <div class="diagnosis-item">
+                  <div class="diagnosis-top">
+                    <div class="diagnosis-name">Fever, unspecified</div>
+
+                    <div class="icd-code">R50.9</div>
+                  </div>
+
+                  <div class="diagnosis-confidence">AI Confidence: 91%</div>
+                </div>
+
+                <div class="diagnosis-item">
+                  <div class="diagnosis-top">
+                    <div class="diagnosis-name">Cough</div>
+
+                    <div class="icd-code">R05.9</div>
+                  </div>
+
+                  <div class="diagnosis-confidence">AI Confidence: 88%</div>
+                </div>
+
+                <div class="diagnosis-item">
+                  <div class="diagnosis-top">
+                    <div class="diagnosis-name">
+                      Acute respiratory infection
+                    </div>
+
+                    <div class="icd-code">J06.9</div>
+                  </div>
+
+                  <div class="diagnosis-confidence">AI Confidence: 72%</div>
+                </div>
+              </div>
+
+              <!-- CLAIM CHECK -->
+
+              <div class="section-title">AI Claim Consistency Check</div>
+
+              <div class="check-list">
+                <!-- DIAGNOSIS -->
+
+                <div class="check-item">
+                  <div class="check-left">
+                    <div class="check-icon check-success">✓</div>
+
+                    <div>
+                      <div class="check-name">Diagnosis ↔ RME</div>
+
+                      <div class="check-detail">
+                        Diagnosis sesuai dengan data RME
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-status" style="color: #15803d">MATCH</div>
+                </div>
+
+                <!-- PROCEDURE -->
+
+                <div class="check-item">
+                  <div class="check-left">
+                    <div class="check-icon check-success">✓</div>
+
+                    <div>
+                      <div class="check-name">Diagnosis ↔ Tindakan</div>
+
+                      <div class="check-detail">
+                        Tindakan mendukung diagnosis
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-status" style="color: #15803d">MATCH</div>
+                </div>
+
+                <!-- THERAPY -->
+
+                <div class="check-item">
+                  <div class="check-left">
+                    <div class="check-icon check-success">✓</div>
+
+                    <div>
+                      <div class="check-name">Diagnosis ↔ Terapi</div>
+
+                      <div class="check-detail">
+                        Terapi konsisten dengan diagnosis
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-status" style="color: #15803d">MATCH</div>
+                </div>
+
+                <!-- DOCUMENT -->
+
+                <div class="check-item">
+                  <div class="check-left">
+                    <div class="check-icon check-warning">!</div>
+
+                    <div>
+                      <div class="check-name">RME ↔ Dokumen</div>
+
+                      <div class="check-detail">
+                        Interpretasi radiologi perlu diverifikasi
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-status" style="color: #b45309">REVIEW</div>
+                </div>
+
+                <!-- BILLING -->
+
+                <div class="check-item">
+                  <div class="check-left">
+                    <div class="check-icon check-warning">!</div>
+
+                    <div>
+                      <div class="check-name">RME ↔ Billing</div>
+
+                      <div class="check-detail">
+                        Satu tindakan perlu verifikasi billing
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="check-status" style="color: #b45309">REVIEW</div>
+                </div>
+              </div>
+
+              <!-- AI RECOMMENDATION -->
+
+              <div class="ai-recommendation">
+                <div class="ai-rec-header">
+                  <div class="ai-rec-title">
+                    🤖 Rekomendasi AI Sebelum Klaim
+                  </div>
+
+                  <span class="tag tag-blue"> AI Analysis </span>
+                </div>
+
+                <div class="ai-rec-body">
+                  <div class="rec success">
+                    <div class="rec-title">✓ Diagnosis dapat digunakan</div>
+
+                    <div class="rec-text">
+                      Diagnosis J18.9 memiliki kecocokan tinggi dengan
+                      dokumentasi klinis dan episode pelayanan.
+                    </div>
+                  </div>
+
+                  <div class="rec success">
+                    <div class="rec-title">✓ Terapi mendukung diagnosis</div>
+
+                    <div class="rec-text">
+                      Ceftriaxone, paracetamol, infus dan oksigen ditemukan
+                      dalam dokumentasi pelayanan.
+                    </div>
+                  </div>
+
+                  <div class="rec warning">
+                    <div class="rec-title">⚠ Verifikasi dokumen radiologi</div>
+
+                    <div class="rec-text">
+                      Pastikan hasil dan interpretasi foto thorax telah final
+                      dan tercatat pada RME.
+                    </div>
+                  </div>
+
+                  <div class="rec warning">
+                    <div class="rec-title">⚠ Verifikasi billing</div>
+
+                    <div class="rec-text">
+                      AI menemukan satu tindakan yang perlu dicocokkan kembali
+                      dengan transaksi billing.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- READINESS -->
+
+              <div class="readiness">
+                <div class="readiness-circle" id="readinessScore">89%</div>
+
+                <div>
+                  <div class="readiness-title">Claim Readiness Score</div>
+
+                  <div class="readiness-text" id="readinessText">
+                    Dokumen dan data klinis cukup kuat untuk dilanjutkan ke
+                    tahap validasi klaim.
+                  </div>
+                </div>
+              </div>
+
+              <!-- ACTION -->
+
+              <div class="result-actions">
+                <button class="btn btn-outline" onclick="resetScreening()">
+                  ↻ Screening Ulang
+                </button>
+
+                <button class="btn btn-success" onclick="continueClaim()">
+                  Lanjut ke AI Claim →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      /* =========================================================
+   DUMMY DATA
+========================================================= */
+
+      const patients = {
+        "VST-20260813-001": {
+          name: "Ahmad Fauzan",
+
+          rm: "00-12-45-78",
+
+          doctor: "dr. Andi Pratama",
+        },
+
+        "VST-20260813-002": {
+          name: "Budi Santoso",
+
+          rm: "00-21-36-91",
+
+          doctor: "dr. Rina Sari",
+        },
+
+        "VST-20260813-003": {
+          name: "Siti Rahma",
+
+          rm: "00-32-41-22",
+
+          doctor: "dr. Andi Pratama",
+        },
+      };
+
+      /* =========================================================
+   GLOBAL
+========================================================= */
+
+      let selectedVisit = null;
+
+      let selectedFile = null;
+
+      /* =========================================================
+   SELECT VISIT
+========================================================= */
+
+      function selectVisit() {
+        const visit = document.getElementById("visitSelect").value;
+
+        if (!visit) {
+          alert("Silakan pilih nomor visit terlebih dahulu.");
+
+          return;
+        }
+
+        selectedVisit = visit;
+
+        const data = patients[visit];
+
+        document.getElementById("patientSelect").value =
+          visit === "VST-20260813-001"
+            ? "ahmad"
+            : visit === "VST-20260813-002"
+              ? "budi"
+              : "siti";
+
+        document.getElementById("miniName").innerText = data.name;
+
+        document.getElementById("miniDetail").innerText =
+          data.rm + " • " + visit + " • " + data.doctor;
+
+        document.getElementById("patientMini").classList.add("show");
+
+        setStep(2);
+      }
+
+      /* =========================================================
+   FILE HANDLER
+========================================================= */
+
+      function handleFile(file) {
+        if (!file) {
+          return;
+        }
+
+        if (file.type !== "application/pdf") {
+          alert("File harus berupa PDF.");
+
+          return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+          alert("Ukuran file maksimal 10 MB.");
+
+          return;
+        }
+
+        selectedFile = file;
+
+        document.getElementById("fileName").innerText = file.name;
+
+        document.getElementById("fileSize").innerText = formatBytes(file.size);
+
+        document.getElementById("filePreview").classList.add("show");
+
+        document.getElementById("screenButton").disabled = false;
+
+        setStep(2);
+      }
+
+      /* =========================================================
+   FORMAT FILE SIZE
+========================================================= */
+
+      function formatBytes(bytes) {
+        if (bytes === 0) {
+          return "0 Bytes";
+        }
+
+        const sizes = ["Bytes", "KB", "MB"];
+
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+        return (
+          parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + " " + sizes[i]
+        );
+      }
+
+      /* =========================================================
+   REMOVE FILE
+========================================================= */
+
+      function removeFile(event) {
+        event.stopPropagation();
+
+        selectedFile = null;
+
+        document.getElementById("filePreview").classList.remove("show");
+
+        document.getElementById("screenButton").disabled = true;
+
+        document.getElementById("pdfInput").value = "";
+
+        document.getElementById("screening").classList.remove("show");
+      }
+
+      /* =========================================================
+   START SCREENING
+========================================================= */
+
+      function startScreening() {
+        if (!selectedVisit) {
+          alert("Pilih nomor visit terlebih dahulu.");
+
+          return;
+        }
+
+        if (!selectedFile) {
+          alert("Upload file PDF terlebih dahulu.");
+
+          return;
+        }
+
+        const screening = document.getElementById("screening");
+
+        const progress = document.getElementById("screeningProgress");
+
+        const percent = document.getElementById("screeningPercent");
+
+        const log = document.getElementById("screeningLog");
+
+        const button = document.getElementById("screenButton");
+
+        screening.classList.add("show");
+
+        button.disabled = true;
+
+        button.innerText = "⏳ AI Screening...";
+
+        setStep(3);
+
+        const logs = [
+          "Initializing AI document engine...",
+
+          "Reading PDF document...",
+
+          "Detecting document structure...",
+
+          "Running OCR extraction...",
+
+          "Extracting clinical entities...",
+
+          "Detecting diagnosis and ICD candidates...",
+
+          "Analyzing therapy and procedures...",
+
+          "Comparing document with RME...",
+
+          "Running claim consistency check...",
+
+          "Generating AI recommendation...",
+        ];
+
+        let progressValue = 0;
+
+        let logIndex = 0;
+
+        const interval = setInterval(() => {
+          progressValue += 10;
+
+          progress.style.width = progressValue + "%";
+
+          percent.innerText = progressValue + "%";
+
+          if (logIndex < logs.length) {
+            log.innerHTML +=
+              "<div class='log-active'>" + "> " + logs[logIndex] + "</div>";
+
+            log.scrollTop = log.scrollHeight;
+
+            logIndex++;
+          }
+
+          if (progressValue >= 100) {
+            clearInterval(interval);
+
+            setTimeout(() => {
+              finishScreening();
+            }, 500);
+          }
+        }, 300);
+      }
+
+      /* =========================================================
+   FINISH SCREENING
+========================================================= */
+
+      function finishScreening() {
+        document.getElementById("resultEmpty").style.display = "none";
+
+        document.getElementById("resultContent").classList.add("show");
+
+        document.getElementById("screenButton").innerText =
+          "✓ Screening Complete";
+
+        setStep(4);
+
+        setTimeout(() => {
+          document.getElementById("screenButton").innerText =
+            "↻ Run Screening Again";
+
+          document.getElementById("screenButton").disabled = false;
+        }, 1500);
+      }
+
+      /* =========================================================
+   STEP
+========================================================= */
+
+      function setStep(activeStep) {
+        const steps = ["step1", "step2", "step3", "step4"];
+
+        steps.forEach((id, index) => {
+          const step = document.getElementById(id);
+
+          step.classList.remove("active");
+
+          step.classList.remove("done");
+
+          if (index + 1 < activeStep) {
+            step.classList.add("done");
+          }
+
+          if (index + 1 === activeStep) {
+            step.classList.add("active");
+          }
+        });
+      }
+
+      /* =========================================================
+   RESET SCREENING
+========================================================= */
+
+      function resetScreening() {
+        document.getElementById("resultContent").classList.remove("show");
+
+        document.getElementById("resultEmpty").style.display = "flex";
+
+        document.getElementById("screeningProgress").style.width = "0%";
+
+        document.getElementById("screeningPercent").innerText = "0%";
+
+        document.getElementById("screeningLog").innerHTML =
+          "<div class='log-active'>" + "Waiting for document..." + "</div>";
+
+        document.getElementById("screenButton").innerText =
+          "✨ Start AI Screening";
+
+        document.getElementById("screenButton").disabled = !selectedFile;
+
+        setStep(2);
+      }
+
+      /* =========================================================
+   CONTINUE CLAIM
+========================================================= */
+
+      function continueClaim() {
+        alert(
+          "AI Claim Validation\n\n" +
+            "Visit: " +
+            selectedVisit +
+            "\n\n" +
+            "Diagnosis utama:\n" +
+            "J18.9 - Pneumonia, unspecified\n\n" +
+            "Claim Readiness: 89%\n\n" +
+            "Data siap dilanjutkan ke proses " +
+            "AI INA-CBG Recommendation.",
+        );
+      }
+
+      /* =========================================================
+   DRAG & DROP
+========================================================= */
+
+      const uploadZone = document.getElementById("uploadZone");
+
+      uploadZone.addEventListener("dragover", function (event) {
+        event.preventDefault();
+
+        uploadZone.classList.add("drag");
+      });
+
+      uploadZone.addEventListener("dragleave", function () {
+        uploadZone.classList.remove("drag");
+      });
+
+      uploadZone.addEventListener("drop", function (event) {
+        event.preventDefault();
+
+        uploadZone.classList.remove("drag");
+
+        const file = event.dataTransfer.files[0];
+
+        handleFile(file);
+      });
+    </script>
+  </body>
+</html>

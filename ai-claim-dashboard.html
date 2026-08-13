@@ -1,0 +1,2456 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Claim Dashboard</title>
+
+    <style>
+      /* =========================================================
+   ROOT
+========================================================= */
+
+      :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --primary-light: #eef2ff;
+
+        --blue: #2563eb;
+        --cyan: #0891b2;
+
+        --success: #16a34a;
+        --success-bg: #f0fdf4;
+
+        --warning: #d97706;
+        --warning-bg: #fffbeb;
+
+        --danger: #dc2626;
+        --danger-bg: #fef2f2;
+
+        --purple: #7c3aed;
+
+        --dark: #172033;
+        --text: #334155;
+        --muted: #64748b;
+
+        --border: #e2e8f0;
+        --bg: #f5f7fb;
+
+        --white: #ffffff;
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Arial,
+          sans-serif;
+
+        background: var(--bg);
+
+        color: var(--text);
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      .header {
+        height: 70px;
+
+        background: white;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 30px;
+
+        position: sticky;
+
+        top: 0;
+
+        z-index: 50;
+      }
+
+      .brand {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .brand-icon {
+        width: 40px;
+        height: 40px;
+
+        border-radius: 11px;
+
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 15px;
+
+        font-weight: 800;
+      }
+
+      .brand-name {
+        font-size: 16px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .brand-sub {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .header-right {
+        display: flex;
+
+        align-items: center;
+
+        gap: 20px;
+      }
+
+      .ai-online {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        font-size: 12px;
+
+        color: var(--success);
+
+        font-weight: 650;
+      }
+
+      .online-dot {
+        width: 8px;
+        height: 8px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+
+        box-shadow: 0 0 0 4px #dcfce7;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+
+        border-radius: 50%;
+
+        background: #ede9fe;
+
+        color: #6d28d9;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 13px;
+
+        font-weight: 750;
+      }
+
+      /* =========================================================
+   PAGE
+========================================================= */
+
+      .page {
+        max-width: 1600px;
+
+        margin: auto;
+
+        padding: 28px 30px 50px;
+      }
+
+      .heading {
+        display: flex;
+
+        align-items: flex-end;
+
+        justify-content: space-between;
+
+        margin-bottom: 22px;
+      }
+
+      .heading h1 {
+        margin: 0;
+
+        font-size: 24px;
+
+        color: var(--dark);
+      }
+
+      .heading p {
+        margin: 7px 0 0;
+
+        color: var(--muted);
+
+        font-size: 13px;
+      }
+
+      .engine {
+        padding: 8px 11px;
+
+        border-radius: 8px;
+
+        background: #f0fdf4;
+
+        border: 1px solid #bbf7d0;
+
+        color: #15803d;
+
+        font-size: 10px;
+
+        font-weight: 750;
+      }
+
+      /* =========================================================
+   FILTER
+========================================================= */
+
+      .filter {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 14px;
+
+        padding: 15px;
+
+        margin-bottom: 20px;
+      }
+
+      .filter-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr
+          1fr
+          1fr
+          auto;
+
+        gap: 10px;
+
+        align-items: end;
+      }
+
+      .field label {
+        display: block;
+
+        margin-bottom: 6px;
+
+        font-size: 9px;
+
+        color: var(--muted);
+
+        font-weight: 750;
+      }
+
+      .field select {
+        width: 100%;
+
+        height: 40px;
+
+        border: 1px solid #cbd5e1;
+
+        border-radius: 8px;
+
+        padding: 0 10px;
+
+        background: white;
+
+        color: var(--text);
+
+        outline: none;
+      }
+
+      .field select:focus {
+        border-color: var(--primary);
+      }
+
+      .btn {
+        height: 40px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        padding: 0 16px;
+
+        cursor: pointer;
+
+        font-size: 10px;
+
+        font-weight: 700;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+
+        color: white;
+      }
+
+      .btn-outline {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        color: var(--text);
+      }
+
+      /* =========================================================
+   KPI GRID
+========================================================= */
+
+      .kpi-grid {
+        display: grid;
+
+        grid-template-columns: repeat(5, 1fr);
+
+        gap: 12px;
+
+        margin-bottom: 20px;
+      }
+
+      .kpi {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 13px;
+
+        padding: 16px;
+
+        position: relative;
+
+        overflow: hidden;
+      }
+
+      .kpi::after {
+        content: "";
+
+        position: absolute;
+
+        width: 75px;
+        height: 75px;
+
+        border-radius: 50%;
+
+        right: -35px;
+
+        bottom: -35px;
+
+        background: #f8fafc;
+      }
+
+      .kpi-icon {
+        width: 31px;
+        height: 31px;
+
+        border-radius: 8px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 12px;
+
+        margin-bottom: 11px;
+      }
+
+      .kpi-icon.blue {
+        background: #dbeafe;
+
+        color: #1d4ed8;
+      }
+
+      .kpi-icon.green {
+        background: #dcfce7;
+
+        color: #15803d;
+      }
+
+      .kpi-icon.orange {
+        background: #ffedd5;
+
+        color: #c2410c;
+      }
+
+      .kpi-icon.red {
+        background: #fee2e2;
+
+        color: #b91c1c;
+      }
+
+      .kpi-icon.purple {
+        background: #ede9fe;
+
+        color: #6d28d9;
+      }
+
+      .kpi-value {
+        font-size: 22px;
+
+        font-weight: 850;
+
+        color: var(--dark);
+      }
+
+      .kpi-label {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .kpi-change {
+        margin-top: 9px;
+
+        font-size: 9px;
+
+        font-weight: 700;
+      }
+
+      .kpi-change.up {
+        color: #15803d;
+      }
+
+      .kpi-change.down {
+        color: #dc2626;
+      }
+
+      /* =========================================================
+   MAIN GRID
+========================================================= */
+
+      .main-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr;
+
+        gap: 20px;
+
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 15px;
+
+        overflow: hidden;
+      }
+
+      .card-header {
+        padding: 16px 18px;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .card-title {
+        font-size: 13px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .card-subtitle {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .card-body {
+        padding: 18px;
+      }
+
+      /* =========================================================
+   RISK DISTRIBUTION
+========================================================= */
+
+      .risk-summary {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr;
+
+        gap: 20px;
+
+        align-items: center;
+      }
+
+      .risk-donut {
+        width: 175px;
+        height: 175px;
+
+        margin: auto;
+
+        border-radius: 50%;
+
+        background: conic-gradient(
+          #22c55e 0deg 230deg,
+          #f59e0b 230deg 320deg,
+          #ef4444 320deg 360deg
+        );
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+      }
+
+      .risk-donut::before {
+        content: "";
+
+        position: absolute;
+
+        width: 125px;
+        height: 125px;
+
+        background: white;
+
+        border-radius: 50%;
+      }
+
+      .donut-center {
+        position: relative;
+
+        text-align: center;
+      }
+
+      .donut-number {
+        font-size: 27px;
+
+        font-weight: 850;
+
+        color: var(--dark);
+      }
+
+      .donut-label {
+        font-size: 9px;
+
+        color: var(--muted);
+      }
+
+      .legend {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 13px;
+      }
+
+      .legend-row {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .legend-left {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+      }
+
+      .legend-dot {
+        width: 9px;
+        height: 9px;
+
+        border-radius: 50%;
+      }
+
+      .legend-name {
+        font-size: 10px;
+
+        color: var(--text);
+      }
+
+      .legend-value {
+        font-size: 10px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      /* =========================================================
+   ANOMALY DISTRIBUTION
+========================================================= */
+
+      .anomaly-row {
+        display: grid;
+
+        grid-template-columns:
+          135px
+          1fr
+          45px;
+
+        gap: 10px;
+
+        align-items: center;
+
+        margin-bottom: 15px;
+      }
+
+      .anomaly-row:last-child {
+        margin-bottom: 0;
+      }
+
+      .anomaly-name {
+        font-size: 9px;
+
+        color: var(--text);
+
+        font-weight: 650;
+      }
+
+      .anomaly-track {
+        height: 9px;
+
+        background: #f1f5f9;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+      }
+
+      .anomaly-bar {
+        height: 100%;
+
+        border-radius: 20px;
+      }
+
+      .anomaly-value {
+        text-align: right;
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      /* =========================================================
+   FINANCIAL IMPACT
+========================================================= */
+
+      .financial-highlight {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr;
+
+        gap: 10px;
+
+        margin-bottom: 17px;
+      }
+
+      .fin-card {
+        padding: 15px;
+
+        border-radius: 11px;
+      }
+
+      .fin-card.blue {
+        background: #eff6ff;
+
+        border: 1px solid #bfdbfe;
+      }
+
+      .fin-card.green {
+        background: #f0fdf4;
+
+        border: 1px solid #bbf7d0;
+      }
+
+      .fin-label {
+        font-size: 9px;
+
+        color: var(--muted);
+      }
+
+      .fin-value {
+        font-size: 20px;
+
+        font-weight: 850;
+
+        margin-top: 5px;
+
+        color: var(--dark);
+      }
+
+      .fin-card.green .fin-value {
+        color: #15803d;
+      }
+
+      .fin-note {
+        font-size: 8px;
+
+        color: var(--muted);
+
+        margin-top: 4px;
+      }
+
+      .fin-bars {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+      }
+
+      .fin-row {
+        display: grid;
+
+        grid-template-columns:
+          120px
+          1fr
+          75px;
+
+        gap: 10px;
+
+        align-items: center;
+      }
+
+      .fin-name {
+        font-size: 9px;
+
+        color: var(--text);
+      }
+
+      .fin-track {
+        height: 7px;
+
+        background: #f1f5f9;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+      }
+
+      .fin-progress {
+        height: 100%;
+
+        border-radius: 20px;
+      }
+
+      .fin-amount {
+        text-align: right;
+
+        font-size: 9px;
+
+        font-weight: 750;
+      }
+
+      /* =========================================================
+   CLAIM TABLE
+========================================================= */
+
+      .table-card {
+        margin-bottom: 20px;
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+
+        border-collapse: collapse;
+
+        min-width: 1050px;
+      }
+
+      thead th {
+        text-align: left;
+
+        padding: 11px 14px;
+
+        background: #f8fafc;
+
+        color: #64748b;
+
+        font-size: 9px;
+
+        font-weight: 750;
+
+        border-bottom: 1px solid var(--border);
+      }
+
+      tbody td {
+        padding: 12px 14px;
+
+        border-bottom: 1px solid #f1f5f9;
+
+        font-size: 9px;
+
+        color: var(--text);
+      }
+
+      tbody tr {
+        cursor: pointer;
+
+        transition: 0.15s;
+      }
+
+      tbody tr:hover {
+        background: #fafaff;
+      }
+
+      .patient {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+      }
+
+      .patient-avatar {
+        width: 29px;
+        height: 29px;
+
+        border-radius: 7px;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 11px;
+      }
+
+      .patient-name {
+        font-size: 10px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .visit {
+        font-size: 8px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .status {
+        display: inline-block;
+
+        padding: 5px 8px;
+
+        border-radius: 20px;
+
+        font-size: 8px;
+
+        font-weight: 750;
+      }
+
+      .status-ready {
+        background: #dcfce7;
+
+        color: #15803d;
+      }
+
+      .status-review {
+        background: #fef3c7;
+
+        color: #b45309;
+      }
+
+      .status-risk {
+        background: #fee2e2;
+
+        color: #b91c1c;
+      }
+
+      .status-anomaly {
+        background: #ffedd5;
+
+        color: #c2410c;
+      }
+
+      .risk-score {
+        font-size: 10px;
+
+        font-weight: 800;
+      }
+
+      .score-low {
+        color: #15803d;
+      }
+
+      .score-medium {
+        color: #b45309;
+      }
+
+      .score-high {
+        color: #b91c1c;
+      }
+
+      .amount {
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      /* =========================================================
+   BOTTOM GRID
+========================================================= */
+
+      .bottom-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr
+          1fr;
+
+        gap: 20px;
+      }
+
+      /* =========================================================
+   TOP FINDINGS
+========================================================= */
+
+      .finding {
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 9px;
+
+        padding: 10px 0;
+
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .finding:last-child {
+        border-bottom: none;
+      }
+
+      .finding-icon {
+        width: 25px;
+        height: 25px;
+
+        border-radius: 7px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 10px;
+
+        flex-shrink: 0;
+      }
+
+      .finding-title {
+        font-size: 10px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+      }
+
+      .finding-text {
+        font-size: 8px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+
+        line-height: 1.5;
+      }
+
+      .finding-count {
+        margin-left: auto;
+
+        font-size: 10px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      /* =========================================================
+   READINESS
+========================================================= */
+
+      .readiness {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+      }
+
+      .readiness-row {
+        display: grid;
+
+        grid-template-columns:
+          125px
+          1fr
+          45px;
+
+        gap: 10px;
+
+        align-items: center;
+      }
+
+      .readiness-name {
+        font-size: 9px;
+
+        color: var(--text);
+      }
+
+      .readiness-track {
+        height: 8px;
+
+        background: #f1f5f9;
+
+        border-radius: 20px;
+
+        overflow: hidden;
+      }
+
+      .readiness-bar {
+        height: 100%;
+
+        border-radius: 20px;
+
+        background: #4f46e5;
+      }
+
+      .readiness-value {
+        font-size: 9px;
+
+        text-align: right;
+
+        font-weight: 800;
+      }
+
+      /* =========================================================
+   ENGINE STATUS
+========================================================= */
+
+      .engine-grid {
+        display: grid;
+
+        grid-template-columns:
+          1fr
+          1fr;
+
+        gap: 9px;
+      }
+
+      .engine-item {
+        padding: 11px;
+
+        border: 1px solid var(--border);
+
+        border-radius: 9px;
+
+        background: #fafafa;
+      }
+
+      .engine-top {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .engine-name {
+        font-size: 9px;
+
+        color: var(--dark);
+
+        font-weight: 700;
+      }
+
+      .engine-status {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+      }
+
+      .engine-value {
+        font-size: 8px;
+
+        color: var(--muted);
+
+        margin-top: 5px;
+      }
+
+      /* =========================================================
+   ACTION
+========================================================= */
+
+      .action-bar {
+        display: flex;
+
+        justify-content: flex-end;
+
+        gap: 8px;
+
+        margin-top: 20px;
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 1200px) {
+        .kpi-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        .bottom-grid {
+          grid-template-columns:
+            1fr
+            1fr;
+        }
+      }
+
+      @media (max-width: 950px) {
+        .filter-grid {
+          grid-template-columns:
+            1fr
+            1fr;
+        }
+
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .risk-summary {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .page {
+          padding: 20px 15px 40px;
+        }
+
+        .header {
+          padding: 0 15px;
+        }
+
+        .ai-online {
+          display: none;
+        }
+
+        .kpi-grid {
+          grid-template-columns:
+            1fr
+            1fr;
+        }
+
+        .bottom-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .heading {
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          gap: 12px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .financial-highlight {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =========================================================
+     HEADER
+========================================================= -->
+
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">AI</div>
+
+        <div>
+          <div class="brand-name">AI Claim Dashboard</div>
+
+          <div class="brand-sub">
+            Hospital Claim Intelligence Command Center
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="ai-online">
+          <span class="online-dot"></span>
+
+          All AI Engines Online
+        </div>
+
+        <div class="avatar">A</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <!-- =========================================================
+     HEADING
+========================================================= -->
+
+      <section class="heading">
+        <div>
+          <h1>AI Claim Dashboard</h1>
+
+          <p>
+            Monitoring performa, risiko, anomaly, financial impact dan claim
+            readiness secara terintegrasi.
+          </p>
+        </div>
+
+        <div class="engine">● AI CLAIM INTELLIGENCE ACTIVE</div>
+      </section>
+
+      <!-- =========================================================
+     FILTER
+========================================================= -->
+
+      <section class="filter">
+        <div class="filter-grid">
+          <div class="field">
+            <label> PERIODE </label>
+
+            <select id="period">
+              <option>13 Agustus 2026</option>
+
+              <option>12 Agustus 2026</option>
+
+              <option>01–13 Agustus 2026</option>
+
+              <option>Juli 2026</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label> UNIT </label>
+
+            <select id="unit">
+              <option>Semua Unit</option>
+
+              <option>Rawat Inap</option>
+
+              <option>Rawat Jalan</option>
+
+              <option>IGD</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label> PENJAMIN </label>
+
+            <select>
+              <option>BPJS Kesehatan</option>
+
+              <option>Semua Penjamin</option>
+
+              <option>Asuransi Swasta</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label> STATUS </label>
+
+            <select>
+              <option>Semua Status</option>
+
+              <option>Ready</option>
+
+              <option>Need Review</option>
+
+              <option>High Risk</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" onclick="refreshDashboard()">
+            ↻ Refresh Dashboard
+          </button>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     KPI
+========================================================= -->
+
+      <section class="kpi-grid">
+        <!-- CLAIMS -->
+
+        <div class="kpi">
+          <div class="kpi-icon blue">▣</div>
+
+          <div class="kpi-value">1,248</div>
+
+          <div class="kpi-label">Total Claims Analyzed</div>
+
+          <div class="kpi-change up">↑ 12.4% vs periode sebelumnya</div>
+        </div>
+
+        <!-- READY -->
+
+        <div class="kpi">
+          <div class="kpi-icon green">✓</div>
+
+          <div class="kpi-value">987</div>
+
+          <div class="kpi-label">Claim Ready</div>
+
+          <div class="kpi-change up">79.1% claim readiness</div>
+        </div>
+
+        <!-- REVIEW -->
+
+        <div class="kpi">
+          <div class="kpi-icon orange">!</div>
+
+          <div class="kpi-value">229</div>
+
+          <div class="kpi-label">Need Review</div>
+
+          <div class="kpi-change down">18.3% dari total claim</div>
+        </div>
+
+        <!-- HIGH RISK -->
+
+        <div class="kpi">
+          <div class="kpi-icon red">⚠</div>
+
+          <div class="kpi-value">32</div>
+
+          <div class="kpi-label">High Risk Claims</div>
+
+          <div class="kpi-change up">↓ 8.2% vs periode sebelumnya</div>
+        </div>
+
+        <!-- FINANCIAL -->
+
+        <div class="kpi">
+          <div class="kpi-icon purple">Rp</div>
+
+          <div class="kpi-value">1,42 M</div>
+
+          <div class="kpi-label">Potential Financial Impact</div>
+
+          <div class="kpi-change up">AI detected opportunity</div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     MAIN GRID
+========================================================= -->
+
+      <section class="main-grid">
+        <!-- =====================================================
+     CLAIM RISK
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Claim Risk Distribution</div>
+
+              <div class="card-subtitle">
+                Distribusi risk score seluruh klaim
+              </div>
+            </div>
+
+            <span class="tag tag-blue"> 1,248 CLAIMS </span>
+          </div>
+
+          <div class="card-body">
+            <div class="risk-summary">
+              <div>
+                <div class="risk-donut">
+                  <div class="donut-center">
+                    <div class="donut-number">79%</div>
+
+                    <div class="donut-label">LOW RISK</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="legend">
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: #22c55e">
+                    </span>
+
+                    <span class="legend-name"> Low Risk </span>
+                  </div>
+
+                  <div class="legend-value">987</div>
+                </div>
+
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: #f59e0b">
+                    </span>
+
+                    <span class="legend-name"> Medium Risk </span>
+                  </div>
+
+                  <div class="legend-value">229</div>
+                </div>
+
+                <div class="legend-row">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: #ef4444">
+                    </span>
+
+                    <span class="legend-name"> High Risk </span>
+                  </div>
+
+                  <div class="legend-value">32</div>
+                </div>
+
+                <div style="padding-top: 8px; border-top: 1px solid #f1f5f9">
+                  <div style="font-size: 9px; color: #64748b">
+                    Average Risk Score
+                  </div>
+
+                  <div
+                    style="
+                      font-size: 18px;
+                      font-weight: 800;
+                      color: #172033;
+                      margin-top: 3px;
+                    "
+                  >
+                    27 / 100
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     ANOMALY
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Anomaly Detection</div>
+
+              <div class="card-subtitle">Top anomaly domain</div>
+            </div>
+
+            <span class="tag tag-orange"> 142 FINDINGS </span>
+          </div>
+
+          <div class="card-body">
+            <div class="anomaly-row">
+              <div class="anomaly-name">Length of Stay</div>
+
+              <div class="anomaly-track">
+                <div
+                  class="anomaly-bar"
+                  style="width: 86%; background: #ef4444"
+                ></div>
+              </div>
+
+              <div class="anomaly-value">86</div>
+            </div>
+
+            <div class="anomaly-row">
+              <div class="anomaly-name">Claim Value</div>
+
+              <div class="anomaly-track">
+                <div
+                  class="anomaly-bar"
+                  style="width: 72%; background: #f97316"
+                ></div>
+              </div>
+
+              <div class="anomaly-value">72</div>
+            </div>
+
+            <div class="anomaly-row">
+              <div class="anomaly-name">Coding Pattern</div>
+
+              <div class="anomaly-track">
+                <div
+                  class="anomaly-bar"
+                  style="width: 57%; background: #f59e0b"
+                ></div>
+              </div>
+
+              <div class="anomaly-value">57</div>
+            </div>
+
+            <div class="anomaly-row">
+              <div class="anomaly-name">Procedure Pattern</div>
+
+              <div class="anomaly-track">
+                <div
+                  class="anomaly-bar"
+                  style="width: 44%; background: #f59e0b"
+                ></div>
+              </div>
+
+              <div class="anomaly-value">44</div>
+            </div>
+
+            <div class="anomaly-row">
+              <div class="anomaly-name">Therapy Pattern</div>
+
+              <div class="anomaly-track">
+                <div
+                  class="anomaly-bar"
+                  style="width: 19%; background: #22c55e"
+                ></div>
+              </div>
+
+              <div class="anomaly-value">19</div>
+            </div>
+
+            <div
+              style="
+                margin-top: 18px;
+                padding: 12px;
+                border-radius: 9px;
+                background: #fff7ed;
+                border: 1px solid #fed7aa;
+                font-size: 9px;
+                line-height: 1.6;
+                color: #9a3412;
+              "
+            >
+              <strong>AI Insight:</strong>
+
+              LOS merupakan anomaly domain tertinggi dan menjadi prioritas
+              review pada periode ini.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     FINANCIAL + READINESS
+========================================================= -->
+
+      <section class="main-grid">
+        <!-- =====================================================
+     FINANCIAL
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Financial Impact Overview</div>
+
+              <div class="card-subtitle">Potensi dampak finansial hasil AI</div>
+            </div>
+
+            <span class="tag tag-green"> AI DETECTED </span>
+          </div>
+
+          <div class="card-body">
+            <div class="financial-highlight">
+              <div class="fin-card blue">
+                <div class="fin-label">CURRENT CLAIM VALUE</div>
+
+                <div class="fin-value">Rp 48,7 M</div>
+
+                <div class="fin-note">Total analyzed claim value</div>
+              </div>
+
+              <div class="fin-card green">
+                <div class="fin-label">POTENTIAL IMPACT</div>
+
+                <div class="fin-value">+Rp 1,42 M</div>
+
+                <div class="fin-note">Requires validation</div>
+              </div>
+            </div>
+
+            <div class="fin-bars">
+              <div class="fin-row">
+                <div class="fin-name">Documentation</div>
+
+                <div class="fin-track">
+                  <div
+                    class="fin-progress"
+                    style="width: 82%; background: #f59e0b"
+                  ></div>
+                </div>
+
+                <div class="fin-amount">Rp 520 jt</div>
+              </div>
+
+              <div class="fin-row">
+                <div class="fin-name">Coding</div>
+
+                <div class="fin-track">
+                  <div
+                    class="fin-progress"
+                    style="width: 61%; background: #7c3aed"
+                  ></div>
+                </div>
+
+                <div class="fin-amount">Rp 380 jt</div>
+              </div>
+
+              <div class="fin-row">
+                <div class="fin-name">Grouping</div>
+
+                <div class="fin-track">
+                  <div
+                    class="fin-progress"
+                    style="width: 72%; background: #2563eb"
+                  ></div>
+                </div>
+
+                <div class="fin-amount">Rp 490 jt</div>
+              </div>
+
+              <div class="fin-row">
+                <div class="fin-name">Procedure</div>
+
+                <div class="fin-track">
+                  <div
+                    class="fin-progress"
+                    style="width: 15%; background: #22c55e"
+                  ></div>
+                </div>
+
+                <div class="fin-amount">Rp 30 jt</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     READINESS
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Claim Readiness</div>
+
+              <div class="card-subtitle">Kesiapan klaim sebelum submission</div>
+            </div>
+
+            <span class="tag tag-green"> 79.1% </span>
+          </div>
+
+          <div class="card-body">
+            <div class="readiness">
+              <div class="readiness-row">
+                <div class="readiness-name">RME Completeness</div>
+
+                <div class="readiness-track">
+                  <div class="readiness-bar" style="width: 94%"></div>
+                </div>
+
+                <div class="readiness-value">94%</div>
+              </div>
+
+              <div class="readiness-row">
+                <div class="readiness-name">Clinical Consistency</div>
+
+                <div class="readiness-track">
+                  <div class="readiness-bar" style="width: 91%"></div>
+                </div>
+
+                <div class="readiness-value">91%</div>
+              </div>
+
+              <div class="readiness-row">
+                <div class="readiness-name">Coding Quality</div>
+
+                <div class="readiness-track">
+                  <div class="readiness-bar" style="width: 83%"></div>
+                </div>
+
+                <div class="readiness-value">83%</div>
+              </div>
+
+              <div class="readiness-row">
+                <div class="readiness-name">Supporting Docs</div>
+
+                <div class="readiness-track">
+                  <div class="readiness-bar" style="width: 76%"></div>
+                </div>
+
+                <div class="readiness-value">76%</div>
+              </div>
+
+              <div class="readiness-row">
+                <div class="readiness-name">Claim Validation</div>
+
+                <div class="readiness-track">
+                  <div class="readiness-bar" style="width: 79%"></div>
+                </div>
+
+                <div class="readiness-value">79%</div>
+              </div>
+            </div>
+
+            <div
+              style="
+                margin-top: 18px;
+                padding: 12px;
+                background: #f0fdf4;
+                border: 1px solid #bbf7d0;
+                border-radius: 9px;
+                font-size: 9px;
+                color: #166534;
+                line-height: 1.6;
+              "
+            >
+              <strong>AI Summary:</strong>
+
+              Mayoritas klaim sudah siap diproses. Fokus utama reviewer adalah
+              supporting documentation dan coding quality.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     CLAIM TABLE
+========================================================= -->
+
+      <section class="card table-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Claim Intelligence Queue</div>
+
+            <div class="card-subtitle">
+              Klaim prioritas berdasarkan AI scoring
+            </div>
+          </div>
+
+          <button class="btn btn-outline" onclick="viewAllClaims()">
+            View All Claims →
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>PATIENT</th>
+
+                <th>VISIT</th>
+
+                <th>DIAGNOSIS</th>
+
+                <th>INA-CBG</th>
+
+                <th>CLAIM VALUE</th>
+
+                <th>RISK</th>
+
+                <th>ANOMALY</th>
+
+                <th>STATUS</th>
+
+                <th>AI ACTION</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- ROW 1 -->
+
+              <tr onclick="openClaim('VST-20260813-001')">
+                <td>
+                  <div class="patient">
+                    <div class="patient-avatar">AF</div>
+
+                    <div>
+                      <div class="patient-name">Ahmad Fauzan</div>
+
+                      <div class="visit">RM 00-12-45-78</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>VST-001</td>
+
+                <td>Pneumonia</td>
+
+                <td>J-4-13-I</td>
+
+                <td class="amount">Rp 4,85 jt</td>
+
+                <td>
+                  <span class="risk-score score-low"> 23/100 </span>
+                </td>
+
+                <td>
+                  <span class="status status-anomaly"> Medium </span>
+                </td>
+
+                <td>
+                  <span class="status status-review"> Need Review </span>
+                </td>
+
+                <td>Review</td>
+              </tr>
+
+              <!-- ROW 2 -->
+
+              <tr onclick="openClaim('VST-20260813-002')">
+                <td>
+                  <div class="patient">
+                    <div
+                      class="patient-avatar"
+                      style="background: #dcfce7; color: #15803d"
+                    >
+                      BS
+                    </div>
+
+                    <div>
+                      <div class="patient-name">Budi Santoso</div>
+
+                      <div class="visit">RM 00-21-36-91</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>VST-002</td>
+
+                <td>Stroke</td>
+
+                <td>I-4-10-II</td>
+
+                <td class="amount">Rp 12,4 jt</td>
+
+                <td>
+                  <span class="risk-score score-high"> 78/100 </span>
+                </td>
+
+                <td>
+                  <span class="status status-risk"> High </span>
+                </td>
+
+                <td>
+                  <span class="status status-risk"> High Risk </span>
+                </td>
+
+                <td>Investigate</td>
+              </tr>
+
+              <!-- ROW 3 -->
+
+              <tr onclick="openClaim('VST-20260813-003')">
+                <td>
+                  <div class="patient">
+                    <div
+                      class="patient-avatar"
+                      style="background: #fef3c7; color: #b45309"
+                    >
+                      SR
+                    </div>
+
+                    <div>
+                      <div class="patient-name">Siti Rahma</div>
+
+                      <div class="visit">RM 00-32-41-22</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>VST-003</td>
+
+                <td>Diabetes</td>
+
+                <td>E-4-12-I</td>
+
+                <td class="amount">Rp 3,72 jt</td>
+
+                <td>
+                  <span class="risk-score score-low"> 18/100 </span>
+                </td>
+
+                <td>
+                  <span class="status status-ready"> Normal </span>
+                </td>
+
+                <td>
+                  <span class="status status-ready"> Ready </span>
+                </td>
+
+                <td>Submit</td>
+              </tr>
+
+              <!-- ROW 4 -->
+
+              <tr>
+                <td>
+                  <div class="patient">
+                    <div
+                      class="patient-avatar"
+                      style="background: #fee2e2; color: #b91c1c"
+                    >
+                      DW
+                    </div>
+
+                    <div>
+                      <div class="patient-name">Dedi Wijaya</div>
+
+                      <div class="visit">RM 00-44-72-11</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>VST-004</td>
+
+                <td>Acute Kidney Injury</td>
+
+                <td>N-4-15-II</td>
+
+                <td class="amount">Rp 9,18 jt</td>
+
+                <td>
+                  <span class="risk-score score-high"> 82/100 </span>
+                </td>
+
+                <td>
+                  <span class="status status-risk"> High </span>
+                </td>
+
+                <td>
+                  <span class="status status-risk"> High Risk </span>
+                </td>
+
+                <td>Investigate</td>
+              </tr>
+
+              <!-- ROW 5 -->
+
+              <tr>
+                <td>
+                  <div class="patient">
+                    <div
+                      class="patient-avatar"
+                      style="background: #ede9fe; color: #6d28d9"
+                    >
+                      RN
+                    </div>
+
+                    <div>
+                      <div class="patient-name">Rina Novita</div>
+
+                      <div class="visit">RM 00-51-19-83</div>
+                    </div>
+                  </div>
+                </td>
+
+                <td>VST-005</td>
+
+                <td>Appendicitis</td>
+
+                <td>K-1-03-I</td>
+
+                <td class="amount">Rp 5,32 jt</td>
+
+                <td>
+                  <span class="risk-score score-low"> 21/100 </span>
+                </td>
+
+                <td>
+                  <span class="status status-ready"> Normal </span>
+                </td>
+
+                <td>
+                  <span class="status status-ready"> Ready </span>
+                </td>
+
+                <td>Submit</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     BOTTOM GRID
+========================================================= -->
+
+      <section class="bottom-grid">
+        <!-- =====================================================
+     TOP FINDINGS
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Top AI Findings</div>
+
+              <div class="card-subtitle">Penyebab utama klaim perlu review</div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="finding">
+              <div
+                class="finding-icon"
+                style="background: #fee2e2; color: #b91c1c"
+              >
+                !
+              </div>
+
+              <div>
+                <div class="finding-title">LOS Deviation</div>
+
+                <div class="finding-text">LOS di atas pola kasus serupa.</div>
+              </div>
+
+              <div class="finding-count">86</div>
+            </div>
+
+            <div class="finding">
+              <div
+                class="finding-icon"
+                style="background: #ffedd5; color: #c2410c"
+              >
+                Rp
+              </div>
+
+              <div>
+                <div class="finding-title">Claim Value Anomaly</div>
+
+                <div class="finding-text">
+                  Nilai klaim menyimpang dari baseline.
+                </div>
+              </div>
+
+              <div class="finding-count">72</div>
+            </div>
+
+            <div class="finding">
+              <div
+                class="finding-icon"
+                style="background: #fef3c7; color: #b45309"
+              >
+                C
+              </div>
+
+              <div>
+                <div class="finding-title">Coding Review</div>
+
+                <div class="finding-text">Coding membutuhkan verifikasi.</div>
+              </div>
+
+              <div class="finding-count">57</div>
+            </div>
+
+            <div class="finding">
+              <div
+                class="finding-icon"
+                style="background: #ede9fe; color: #6d28d9"
+              >
+                D
+              </div>
+
+              <div>
+                <div class="finding-title">Documentation Gap</div>
+
+                <div class="finding-text">
+                  Supporting document belum lengkap.
+                </div>
+              </div>
+
+              <div class="finding-count">49</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     CLAIM READINESS
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Submission Readiness</div>
+
+              <div class="card-subtitle">Status portfolio klaim</div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 18px;
+                margin-bottom: 18px;
+              "
+            >
+              <div style="font-size: 36px; font-weight: 850; color: #4f46e5">
+                79%
+              </div>
+
+              <div>
+                <div style="font-size: 11px; font-weight: 750; color: #172033">
+                  Overall Readiness
+                </div>
+
+                <div style="font-size: 9px; color: #64748b; margin-top: 4px">
+                  987 dari 1,248 claim siap diproses
+                </div>
+              </div>
+            </div>
+
+            <div
+              style="
+                height: 9px;
+                background: #f1f5f9;
+                border-radius: 20px;
+                overflow: hidden;
+                margin-bottom: 17px;
+              "
+            >
+              <div
+                style="
+                  width: 79%;
+                  height: 100%;
+                  background: #4f46e5;
+                  border-radius: 20px;
+                "
+              ></div>
+            </div>
+
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+              "
+            >
+              <div
+                style="
+                  background: #f0fdf4;
+                  padding: 10px;
+                  border-radius: 8px;
+                  text-align: center;
+                "
+              >
+                <div style="font-size: 17px; font-weight: 800; color: #15803d">
+                  987
+                </div>
+
+                <div style="font-size: 8px; color: #15803d">Ready</div>
+              </div>
+
+              <div
+                style="
+                  background: #fffbeb;
+                  padding: 10px;
+                  border-radius: 8px;
+                  text-align: center;
+                "
+              >
+                <div style="font-size: 17px; font-weight: 800; color: #b45309">
+                  229
+                </div>
+
+                <div style="font-size: 8px; color: #b45309">Review</div>
+              </div>
+
+              <div
+                style="
+                  background: #fef2f2;
+                  padding: 10px;
+                  border-radius: 8px;
+                  text-align: center;
+                "
+              >
+                <div style="font-size: 17px; font-weight: 800; color: #b91c1c">
+                  32
+                </div>
+
+                <div style="font-size: 8px; color: #b91c1c">High Risk</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =====================================================
+     AI ENGINE
+====================================================== -->
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">AI Engine Status</div>
+
+              <div class="card-subtitle">Monitoring engine</div>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="engine-grid">
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">Recommendation</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">1,248 analyzed</div>
+              </div>
+
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">OCR Engine</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">99.2% availability</div>
+              </div>
+
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">Risk Engine</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">1,248 scored</div>
+              </div>
+
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">Anomaly Engine</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">142 findings</div>
+              </div>
+
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">Financial AI</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">Rp 1,42 M detected</div>
+              </div>
+
+              <div class="engine-item">
+                <div class="engine-top">
+                  <div class="engine-name">CBG Engine</div>
+
+                  <div class="engine-status"></div>
+                </div>
+
+                <div class="engine-value">Grouping active</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =========================================================
+     ACTION
+========================================================= -->
+
+      <div class="action-bar">
+        <button class="btn btn-outline" onclick="exportDashboard()">
+          ↓ Export Dashboard
+        </button>
+
+        <button class="btn btn-primary" onclick="openPriorityQueue()">
+          ⚡ Open Priority Queue
+        </button>
+      </div>
+    </main>
+
+    <script>
+      /* =========================================================
+   REFRESH DASHBOARD
+========================================================= */
+
+      function refreshDashboard() {
+        const button = event.target;
+
+        const original = button.innerText;
+
+        button.disabled = true;
+
+        button.innerText = "⏳ Updating...";
+
+        setTimeout(() => {
+          button.innerText = "✓ Dashboard Updated";
+
+          setTimeout(() => {
+            button.innerText = original;
+
+            button.disabled = false;
+          }, 1000);
+        }, 1200);
+      }
+
+      /* =========================================================
+   OPEN CLAIM
+========================================================= */
+
+      function openClaim(visit) {
+        alert(
+          "AI Claim Intelligence\n\n" +
+            "Visit: " +
+            visit +
+            "\n\n" +
+            "Opening claim analysis...\n\n" +
+            "Available modules:\n" +
+            "• AI Recommendation\n" +
+            "• AI OCR\n" +
+            "• Risk Detection\n" +
+            "• Anomaly Detection\n" +
+            "• Financial Impact",
+        );
+      }
+
+      /* =========================================================
+   VIEW ALL CLAIMS
+========================================================= */
+
+      function viewAllClaims() {
+        alert(
+          "Claim Intelligence Queue\n\n" +
+            "Menampilkan seluruh klaim " +
+            "yang telah dianalisis AI.",
+        );
+      }
+
+      /* =========================================================
+   PRIORITY QUEUE
+========================================================= */
+
+      function openPriorityQueue() {
+        alert(
+          "AI Priority Queue\n\n" +
+            "TOP PRIORITY\n\n" +
+            "1. Dedi Wijaya\n" +
+            "Risk Score: 82/100\n" +
+            "Anomaly: High\n\n" +
+            "2. Budi Santoso\n" +
+            "Risk Score: 78/100\n" +
+            "Anomaly: High\n\n" +
+            "3. Ahmad Fauzan\n" +
+            "Risk Score: 23/100\n" +
+            "Anomaly: Medium",
+        );
+      }
+
+      /* =========================================================
+   EXPORT
+========================================================= */
+
+      function exportDashboard() {
+        alert(
+          "AI Claim Dashboard\n\n" +
+            "Export dummy berhasil dibuat.\n\n" +
+            "Format: Executive Claim Intelligence Report",
+        );
+      }
+    </script>
+  </body>
+</html>

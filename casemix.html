@@ -1,0 +1,1578 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Claim Intelligence</title>
+
+    <style>
+      /* =========================================================
+   ROOT
+========================================================= */
+
+      :root {
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+
+        --blue: #2563eb;
+        --cyan: #0891b2;
+        --purple: #7c3aed;
+
+        --success: #16a34a;
+        --warning: #d97706;
+        --danger: #dc2626;
+
+        --dark: #111827;
+        --text: #334155;
+        --muted: #64748b;
+
+        --border: #e2e8f0;
+
+        --bg: #f7f8fc;
+
+        --white: #ffffff;
+      }
+
+      /* =========================================================
+   RESET
+========================================================= */
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Arial,
+          sans-serif;
+
+        background: var(--bg);
+
+        color: var(--text);
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      .header {
+        height: 72px;
+
+        background: rgba(255, 255, 255, 0.94);
+
+        backdrop-filter: blur(15px);
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 34px;
+
+        position: sticky;
+
+        top: 0;
+
+        z-index: 100;
+      }
+
+      .brand {
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+      }
+
+      .logo {
+        width: 42px;
+
+        height: 42px;
+
+        border-radius: 12px;
+
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 850;
+
+        box-shadow: 0 6px 18px rgba(79, 70, 229, 0.2);
+      }
+
+      .brand-title {
+        font-size: 15px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      .brand-sub {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .header-right {
+        display: flex;
+
+        align-items: center;
+
+        gap: 18px;
+      }
+
+      .system-status {
+        display: flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        color: #15803d;
+      }
+
+      .status-dot {
+        width: 7px;
+
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+
+        box-shadow: 0 0 0 4px #dcfce7;
+      }
+
+      .user {
+        width: 36px;
+
+        height: 36px;
+
+        border-radius: 50%;
+
+        background: #ede9fe;
+
+        color: #6d28d9;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 11px;
+
+        font-weight: 800;
+      }
+
+      /* =========================================================
+   HERO
+========================================================= */
+
+      .hero {
+        max-width: 1500px;
+
+        margin: auto;
+
+        padding: 70px 35px 50px;
+
+        display: grid;
+
+        grid-template-columns:
+          1.15fr
+          0.85fr;
+
+        gap: 60px;
+
+        align-items: center;
+      }
+
+      .hero-content {
+        max-width: 700px;
+      }
+
+      .badge {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        padding: 7px 11px;
+
+        border-radius: 20px;
+
+        background: #eef2ff;
+
+        border: 1px solid #c7d2fe;
+
+        color: #4338ca;
+
+        font-size: 9px;
+
+        font-weight: 800;
+
+        letter-spacing: 0.4px;
+
+        margin-bottom: 17px;
+      }
+
+      .badge-dot {
+        width: 6px;
+
+        height: 6px;
+
+        background: #4f46e5;
+
+        border-radius: 50%;
+      }
+
+      .hero h1 {
+        margin: 0;
+
+        font-size: 42px;
+
+        line-height: 1.12;
+
+        letter-spacing: -1.3px;
+
+        color: var(--dark);
+      }
+
+      .hero h1 span {
+        background: linear-gradient(90deg, #4f46e5, #7c3aed, #0891b2);
+
+        -webkit-background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        max-width: 620px;
+
+        margin: 18px 0 0;
+
+        font-size: 14px;
+
+        line-height: 1.75;
+
+        color: var(--muted);
+      }
+
+      .hero-actions {
+        display: flex;
+
+        gap: 10px;
+
+        margin-top: 25px;
+      }
+
+      .btn {
+        height: 42px;
+
+        padding: 0 17px;
+
+        border-radius: 9px;
+
+        font-size: 10px;
+
+        font-weight: 750;
+
+        cursor: pointer;
+
+        border: none;
+      }
+
+      .btn-primary {
+        color: white;
+
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+
+        box-shadow: 0 7px 20px rgba(79, 70, 229, 0.2);
+      }
+
+      .btn-outline {
+        background: white;
+
+        color: var(--text);
+
+        border: 1px solid var(--border);
+      }
+
+      /* =========================================================
+   HERO VISUAL
+========================================================= */
+
+      .hero-visual {
+        position: relative;
+
+        min-height: 330px;
+      }
+
+      .ai-orb {
+        width: 270px;
+
+        height: 270px;
+
+        border-radius: 50%;
+
+        margin: auto;
+
+        position: relative;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: radial-gradient(
+          circle at center,
+          #ffffff 0%,
+          #eef2ff 38%,
+          #ddd6fe 68%,
+          #c7d2fe 100%
+        );
+
+        box-shadow: 0 25px 70px rgba(79, 70, 229, 0.18);
+      }
+
+      .ai-orb::before {
+        content: "";
+
+        position: absolute;
+
+        inset: -20px;
+
+        border-radius: 50%;
+
+        border: 1px dashed #c7d2fe;
+
+        animation: rotate 18s linear infinite;
+      }
+
+      .ai-orb::after {
+        content: "";
+
+        position: absolute;
+
+        inset: -42px;
+
+        border-radius: 50%;
+
+        border: 1px dashed #ddd6fe;
+
+        animation: rotate-reverse 24s linear infinite;
+      }
+
+      .orb-center {
+        width: 115px;
+
+        height: 115px;
+
+        border-radius: 32px;
+
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+
+        color: white;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+        box-shadow: 0 15px 40px rgba(79, 70, 229, 0.3);
+
+        position: relative;
+
+        z-index: 2;
+      }
+
+      .orb-ai {
+        font-size: 27px;
+
+        font-weight: 900;
+      }
+
+      .orb-label {
+        margin-top: 4px;
+
+        font-size: 8px;
+
+        opacity: 0.85;
+
+        letter-spacing: 1px;
+      }
+
+      @keyframes rotate {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes rotate-reverse {
+        to {
+          transform: rotate(-360deg);
+        }
+      }
+
+      /* =========================================================
+   FLOATING INFO
+========================================================= */
+
+      .float-card {
+        position: absolute;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 10px;
+
+        padding: 10px 12px;
+
+        box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+
+        min-width: 120px;
+      }
+
+      .float-card.one {
+        left: 0;
+
+        top: 40px;
+      }
+
+      .float-card.two {
+        right: 0;
+
+        top: 100px;
+      }
+
+      .float-card.three {
+        left: 45px;
+
+        bottom: 20px;
+      }
+
+      .float-label {
+        font-size: 7px;
+
+        color: var(--muted);
+
+        font-weight: 700;
+      }
+
+      .float-value {
+        margin-top: 4px;
+
+        font-size: 12px;
+
+        font-weight: 850;
+
+        color: var(--dark);
+      }
+
+      .float-value.green {
+        color: #15803d;
+      }
+
+      .float-value.red {
+        color: #dc2626;
+      }
+
+      /* =========================================================
+   SECTION
+========================================================= */
+
+      .section {
+        max-width: 1500px;
+
+        margin: auto;
+
+        padding: 20px 35px 70px;
+      }
+
+      .section-heading {
+        display: flex;
+
+        align-items: flex-end;
+
+        justify-content: space-between;
+
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 20px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      .section-subtitle {
+        margin-top: 5px;
+
+        font-size: 10px;
+
+        color: var(--muted);
+      }
+
+      .module-count {
+        padding: 7px 10px;
+
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 8px;
+
+        font-size: 9px;
+
+        color: var(--muted);
+
+        font-weight: 700;
+      }
+
+      /* =========================================================
+   MODULE GRID
+========================================================= */
+
+      .module-grid {
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 15px;
+      }
+
+      /* =========================================================
+   MODULE CARD
+========================================================= */
+
+      .module-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 15px;
+
+        padding: 20px;
+
+        cursor: pointer;
+
+        position: relative;
+
+        overflow: hidden;
+
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          border-color 0.18s ease;
+      }
+
+      .module-card:hover {
+        transform: translateY(-4px);
+
+        border-color: #c7d2fe;
+
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.09);
+      }
+
+      .module-card::after {
+        content: "";
+
+        position: absolute;
+
+        width: 120px;
+
+        height: 120px;
+
+        border-radius: 50%;
+
+        right: -60px;
+
+        bottom: -60px;
+
+        background: #f8fafc;
+      }
+
+      .module-top {
+        display: flex;
+
+        align-items: flex-start;
+
+        justify-content: space-between;
+      }
+
+      .module-icon {
+        width: 46px;
+
+        height: 46px;
+
+        border-radius: 12px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 20px;
+      }
+
+      .icon-blue {
+        background: #dbeafe;
+
+        color: #2563eb;
+      }
+
+      .icon-purple {
+        background: #ede9fe;
+
+        color: #7c3aed;
+      }
+
+      .icon-red {
+        background: #fee2e2;
+
+        color: #dc2626;
+      }
+
+      .icon-orange {
+        background: #ffedd5;
+
+        color: #ea580c;
+      }
+
+      .icon-green {
+        background: #dcfce7;
+
+        color: #16a34a;
+      }
+
+      .icon-cyan {
+        background: #cffafe;
+
+        color: #0891b2;
+      }
+
+      .module-number {
+        width: 25px;
+
+        height: 25px;
+
+        border-radius: 7px;
+
+        background: #f8fafc;
+
+        color: #94a3b8;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 9px;
+
+        font-weight: 800;
+      }
+
+      .module-title {
+        margin-top: 17px;
+
+        font-size: 14px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      .module-description {
+        margin-top: 7px;
+
+        min-height: 45px;
+
+        font-size: 10px;
+
+        line-height: 1.65;
+
+        color: var(--muted);
+      }
+
+      .module-meta {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-top: 18px;
+
+        padding-top: 13px;
+
+        border-top: 1px solid #f1f5f9;
+      }
+
+      .module-status {
+        display: flex;
+
+        align-items: center;
+
+        gap: 5px;
+
+        font-size: 8px;
+
+        color: #15803d;
+
+        font-weight: 700;
+      }
+
+      .module-status-dot {
+        width: 6px;
+
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: #22c55e;
+      }
+
+      .module-open {
+        font-size: 9px;
+
+        color: #4f46e5;
+
+        font-weight: 800;
+      }
+
+      /* =========================================================
+   FEATURE STRIP
+========================================================= */
+
+      .feature-strip {
+        margin-top: 18px;
+
+        background: linear-gradient(135deg, #111827, #1e1b4b);
+
+        border-radius: 16px;
+
+        padding: 24px 27px;
+
+        color: white;
+
+        display: grid;
+
+        grid-template-columns:
+          1.2fr
+          repeat(4, 1fr);
+
+        gap: 20px;
+
+        align-items: center;
+      }
+
+      .feature-title {
+        font-size: 13px;
+
+        font-weight: 800;
+      }
+
+      .feature-text {
+        margin-top: 5px;
+
+        font-size: 9px;
+
+        line-height: 1.6;
+
+        color: #cbd5e1;
+      }
+
+      .feature-item {
+        border-left: 1px solid rgba(255, 255, 255, 0.12);
+
+        padding-left: 18px;
+      }
+
+      .feature-value {
+        font-size: 18px;
+
+        font-weight: 850;
+      }
+
+      .feature-label {
+        margin-top: 4px;
+
+        font-size: 8px;
+
+        color: #94a3b8;
+      }
+
+      /* =========================================================
+   FLOW
+========================================================= */
+
+      .flow-section {
+        background: white;
+
+        border-top: 1px solid var(--border);
+
+        border-bottom: 1px solid var(--border);
+      }
+
+      .flow {
+        max-width: 1500px;
+
+        margin: auto;
+
+        padding: 42px 35px 45px;
+      }
+
+      .flow-title {
+        text-align: center;
+
+        font-size: 18px;
+
+        font-weight: 800;
+
+        color: var(--dark);
+      }
+
+      .flow-subtitle {
+        text-align: center;
+
+        margin-top: 5px;
+
+        font-size: 9px;
+
+        color: var(--muted);
+      }
+
+      .flow-line {
+        margin-top: 30px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+      }
+
+      .flow-item {
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        min-width: 125px;
+      }
+
+      .flow-icon {
+        width: 44px;
+
+        height: 44px;
+
+        border-radius: 12px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: #eef2ff;
+
+        color: #4f46e5;
+
+        font-size: 15px;
+
+        font-weight: 800;
+      }
+
+      .flow-name {
+        margin-top: 8px;
+
+        font-size: 8px;
+
+        font-weight: 750;
+
+        color: var(--dark);
+
+        text-align: center;
+      }
+
+      .flow-arrow {
+        width: 40px;
+
+        height: 1px;
+
+        background: #cbd5e1;
+
+        position: relative;
+
+        margin: 0 3px 20px;
+      }
+
+      .flow-arrow::after {
+        content: "›";
+
+        position: absolute;
+
+        right: -3px;
+
+        top: -9px;
+
+        color: #94a3b8;
+
+        font-size: 18px;
+      }
+
+      /* =========================================================
+   FOOTER
+========================================================= */
+
+      .footer {
+        max-width: 1500px;
+
+        margin: auto;
+
+        padding: 22px 35px 30px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+      }
+
+      .footer-left {
+        font-size: 9px;
+
+        color: var(--muted);
+      }
+
+      .footer-right {
+        display: flex;
+
+        gap: 15px;
+
+        font-size: 8px;
+
+        color: #94a3b8;
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 1100px) {
+        .hero {
+          grid-template-columns: 1fr;
+
+          gap: 20px;
+        }
+
+        .hero-content {
+          max-width: 850px;
+        }
+
+        .hero-visual {
+          min-height: 300px;
+        }
+
+        .module-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .feature-strip {
+          grid-template-columns:
+            1fr
+            1fr
+            1fr;
+        }
+
+        .feature-title {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 750px) {
+        .header {
+          padding: 0 17px;
+        }
+
+        .system-status {
+          display: none;
+        }
+
+        .hero {
+          padding: 45px 20px 35px;
+        }
+
+        .hero h1 {
+          font-size: 32px;
+        }
+
+        .hero p {
+          font-size: 12px;
+        }
+
+        .section {
+          padding: 20px 45px;
+        }
+
+        .module-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-strip {
+          grid-template-columns:
+            1fr
+            1fr;
+        }
+
+        .flow {
+          padding: 35px 15px;
+
+          overflow-x: auto;
+        }
+
+        .flow-line {
+          width: 850px;
+        }
+
+        .float-card {
+          display: none;
+        }
+
+        .footer {
+          padding: 20px;
+
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          gap: 8px;
+        }
+      }
+
+      @media (max-width: 450px) {
+        .hero h1 {
+          font-size: 28px;
+        }
+
+        .hero-actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .feature-strip {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =========================================================
+     HEADER
+========================================================= -->
+
+    <header class="header">
+      <div class="brand">
+        <div class="logo">AI</div>
+
+        <div>
+          <div class="brand-title">AI Claim Intelligence</div>
+
+          <div class="brand-sub">AI Casemix & Claim Management Platform</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="system-status">
+          <span class="status-dot"></span>
+
+          AI System Online
+        </div>
+
+        <div class="user">A</div>
+      </div>
+    </header>
+
+    <!-- =========================================================
+     HERO
+========================================================= -->
+
+    <section class="hero">
+      <div class="hero-content">
+        <div class="badge">
+          <span class="badge-dot"></span>
+
+          ENTERPRISE AI CLAIM PLATFORM
+        </div>
+
+        <h1>
+          Smarter Claim.
+
+          <br />
+
+          <span> Better Financial Intelligence. </span>
+        </h1>
+
+        <p>
+          Platform AI terintegrasi untuk membantu rumah sakit menganalisis
+          coding, membaca dokumen RME, mendeteksi risiko dan anomaly, menghitung
+          financial impact, serta meningkatkan kesiapan klaim sebelum
+          submission.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="openDashboard()">
+            Open AI Claim Dashboard →
+          </button>
+
+          <button class="btn btn-outline" onclick="scrollModules()">
+            Explore AI Modules
+          </button>
+        </div>
+      </div>
+
+      <!-- =====================================================
+         HERO VISUAL
+    ====================================================== -->
+
+      <div class="hero-visual">
+        <div class="ai-orb">
+          <div class="orb-center">
+            <div class="orb-ai">AI</div>
+
+            <div class="orb-label">CLAIM INTELLIGENCE</div>
+          </div>
+        </div>
+
+        <!-- FLOAT 1 -->
+
+        <div class="float-card one">
+          <div class="float-label">CLAIM ANALYZED</div>
+
+          <div class="float-value">1,248</div>
+        </div>
+
+        <!-- FLOAT 2 -->
+
+        <div class="float-card two">
+          <div class="float-label">RISK DETECTED</div>
+
+          <div class="float-value red">32 High Risk</div>
+        </div>
+
+        <!-- FLOAT 3 -->
+
+        <div class="float-card three">
+          <div class="float-label">FINANCIAL IMPACT</div>
+
+          <div class="float-value green">+Rp 1,42 M</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+     MODULE SECTION
+========================================================= -->
+
+    <section class="section" id="modules">
+      <div class="section-heading">
+        <div>
+          <div class="section-title">AI Claim Modules</div>
+
+          <div class="section-subtitle">
+            Pilih modul AI untuk memulai analisis klaim.
+          </div>
+        </div>
+
+        <div class="module-count">06 AI MODULES</div>
+      </div>
+
+      <div class="module-grid">
+        <!-- =================================================
+             01 RECOMMENDATION
+        ================================================== -->
+
+        <div
+          class="module-card"
+          onclick="openPage('ai-claim-recommendation.html')"
+        >
+          <div class="module-top">
+            <div class="module-icon icon-blue">🧠</div>
+
+            <div class="module-number">01</div>
+          </div>
+
+          <div class="module-title">AI Claim Recommendation</div>
+
+          <div class="module-description">
+            Membantu menentukan rekomendasi kode INA-CBG berdasarkan diagnosis,
+            procedure, clinical information dan data RME pasien.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              AI Ready
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             02 OCR
+        ================================================== -->
+
+        <div class="module-card" onclick="openPage('ai-claim-ocr.html')">
+          <div class="module-top">
+            <div class="module-icon icon-purple">📄</div>
+
+            <div class="module-number">02</div>
+          </div>
+
+          <div class="module-title">AI Claim OCR</div>
+
+          <div class="module-description">
+            Upload dokumen RME atau PDF, kemudian AI melakukan OCR, screening
+            clinical information, ekstraksi diagnosis dan rekomendasi claim.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              OCR Online
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             03 RISK
+        ================================================== -->
+
+        <div
+          class="module-card"
+          onclick="openPage('ai-claim-risk-detection.html')"
+        >
+          <div class="module-top">
+            <div class="module-icon icon-red">⚠️</div>
+
+            <div class="module-number">03</div>
+          </div>
+
+          <div class="module-title">AI Claim Risk Detection</div>
+
+          <div class="module-description">
+            Mendeteksi tingkat risiko klaim berdasarkan coding, diagnosis,
+            dokumentasi, LOS, procedure dan pola claim sebelumnya.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              Risk Engine
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             04 ANOMALY
+        ================================================== -->
+
+        <div
+          class="module-card"
+          onclick="openPage('ai-claim-anomaly-detection.html')"
+        >
+          <div class="module-top">
+            <div class="module-icon icon-orange">📊</div>
+
+            <div class="module-number">04</div>
+          </div>
+
+          <div class="module-title">AI Claim Anomaly Detection</div>
+
+          <div class="module-description">
+            Mengidentifikasi pola klaim yang tidak normal seperti LOS deviation,
+            claim value anomaly, coding pattern dan procedure anomaly.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              Detection Active
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             05 FINANCIAL
+        ================================================== -->
+
+        <div
+          class="module-card"
+          onclick="openPage('ai-claim-financial-impact.html')"
+        >
+          <div class="module-top">
+            <div class="module-icon icon-green">💰</div>
+
+            <div class="module-number">05</div>
+          </div>
+
+          <div class="module-title">AI Claim Financial Impact</div>
+
+          <div class="module-description">
+            Menghitung current claim value, potential financial impact, CBG
+            scenario, financial variance dan documentation yang perlu
+            diverifikasi.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              Financial AI
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             06 DASHBOARD
+        ================================================== -->
+
+        <div class="module-card" onclick="openPage('ai-claim-dashboard.html')">
+          <div class="module-top">
+            <div class="module-icon icon-cyan">📈</div>
+
+            <div class="module-number">06</div>
+          </div>
+
+          <div class="module-title">AI Claim Dashboard</div>
+
+          <div class="module-description">
+            Command center untuk memonitor seluruh portfolio klaim, risk,
+            anomaly, financial impact, readiness dan AI priority queue.
+          </div>
+
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="module-status-dot"> </span>
+
+              Command Center
+            </div>
+
+            <div class="module-open">Open →</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================
+         FEATURE STRIP
+    ====================================================== -->
+
+      <div class="feature-strip">
+        <div>
+          <div class="feature-title">AI Claim Intelligence</div>
+
+          <div class="feature-text">
+            Satu ekosistem untuk membantu tim Casemix, Coder, Finance dan
+            manajemen memahami kualitas serta potensi klaim.
+          </div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-value">1,248</div>
+
+          <div class="feature-label">Claims Analyzed</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-value">79%</div>
+
+          <div class="feature-label">Claim Readiness</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-value">32</div>
+
+          <div class="feature-label">High Risk</div>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-value">Rp 1,42 M</div>
+
+          <div class="feature-label">Potential Impact</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+     FLOW SECTION
+========================================================= -->
+
+    <section class="flow-section">
+      <div class="flow">
+        <div class="flow-title">AI Claim Intelligence Flow</div>
+
+        <div class="flow-subtitle">Dari data RME hingga claim readiness</div>
+
+        <div class="flow-line">
+          <div class="flow-item">
+            <div class="flow-icon">R</div>
+
+            <div class="flow-name">RME</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">AI</div>
+
+            <div class="flow-name">Recommendation</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">OCR</div>
+
+            <div class="flow-name">Document OCR</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">!</div>
+
+            <div class="flow-name">Risk Detection</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">A</div>
+
+            <div class="flow-name">Anomaly</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">Rp</div>
+
+            <div class="flow-name">Financial Impact</div>
+          </div>
+
+          <div class="flow-arrow"></div>
+
+          <div class="flow-item">
+            <div class="flow-icon">✓</div>
+
+            <div class="flow-name">Claim Ready</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+     FOOTER
+========================================================= -->
+
+    <footer class="footer">
+      <div class="footer-left">
+        AI Claim Intelligence Platform • AI Casemix Management
+      </div>
+
+      <div class="footer-right">
+        <span> RME Integration </span>
+
+        <span> BPJS Ready </span>
+
+        <span> AI Decision Support </span>
+      </div>
+    </footer>
+
+    <script>
+      /* =========================================================
+   PAGE ROUTER
+========================================================= */
+
+      function openPage(page) {
+        window.location.href = page;
+      }
+
+      /* =========================================================
+   DASHBOARD
+========================================================= */
+
+      function openDashboard() {
+        window.location.href = "ai-claim-dashboard.html";
+      }
+
+      /* =========================================================
+   SCROLL MODULE
+========================================================= */
+
+      function scrollModules() {
+        document.getElementById("modules").scrollIntoView({
+          behavior: "smooth",
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1919 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>AI Claim Validator - RME</title>
+
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --success: #16a34a;
+        --warning: #f59e0b;
+        --danger: #dc2626;
+        --dark: #172033;
+        --text: #334155;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --bg: #f5f7fb;
+        --white: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          Segoe UI,
+          Arial,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      /* =========================================================
+   HEADER
+========================================================= */
+
+      .header {
+        height: 70px;
+        background: #fff;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #2563eb, #06b6d4);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .logo-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .logo-subtitle {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+
+      .ai-status {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 13px;
+        color: var(--success);
+        font-weight: 600;
+      }
+
+      .ai-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px #dcfce7;
+      }
+
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #dbeafe;
+        color: #1d4ed8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      /* =========================================================
+   LAYOUT
+========================================================= */
+
+      .container {
+        padding: 24px 28px 40px;
+        max-width: 1600px;
+        margin: auto;
+      }
+
+      .page-title {
+        margin-bottom: 22px;
+      }
+
+      .page-title h1 {
+        margin: 0;
+        color: var(--dark);
+        font-size: 24px;
+      }
+
+      .page-title p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      /* =========================================================
+   VISIT SELECTOR
+========================================================= */
+
+      .visit-selector {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px;
+        display: flex;
+        align-items: end;
+        gap: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+      }
+
+      .form-group {
+        flex: 1;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 7px;
+        font-weight: 600;
+      }
+
+      select {
+        width: 100%;
+        height: 42px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 0 12px;
+        background: white;
+        color: var(--text);
+        outline: none;
+      }
+
+      select:focus {
+        border-color: var(--primary);
+      }
+
+      .btn {
+        border: none;
+        height: 42px;
+        padding: 0 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .btn-success {
+        background: var(--success);
+        color: white;
+      }
+
+      .btn-outline {
+        background: white;
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      /* =========================================================
+   PATIENT CARD
+========================================================= */
+
+      .patient-card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .patient-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+
+      .patient-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .patient-avatar {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: #eff6ff;
+        color: #2563eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+      }
+
+      .patient-name {
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .patient-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .badge-blue {
+        background: #eff6ff;
+        color: #2563eb;
+      }
+
+      .badge-green {
+        background: #f0fdf4;
+        color: #15803d;
+      }
+
+      .badge-orange {
+        background: #fff7ed;
+        color: #c2410c;
+      }
+
+      .patient-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 15px;
+      }
+
+      .info-box {
+        background: #f8fafc;
+        border-radius: 9px;
+        padding: 12px;
+      }
+
+      .info-label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .info-value {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--dark);
+      }
+
+      /* =========================================================
+   MAIN GRID
+========================================================= */
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.1fr;
+        gap: 20px;
+      }
+
+      /* =========================================================
+   CARD
+========================================================= */
+
+      .card {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+      }
+
+      .card-header {
+        padding: 17px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .card-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--dark);
+      }
+
+      .card-subtitle {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      /* =========================================================
+   RME SUMMARY
+========================================================= */
+
+      .section {
+        margin-bottom: 22px;
+      }
+
+      .section:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-title {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .diagnosis {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+
+      .diagnosis-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .icd {
+        font-size: 11px;
+        background: #f1f5f9;
+        padding: 4px 7px;
+        border-radius: 5px;
+        color: #475569;
+      }
+
+      .chip-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .chip {
+        padding: 6px 9px;
+        border-radius: 6px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .chip.green {
+        background: #f0fdf4;
+        color: #15803d;
+      }
+
+      .chip.orange {
+        background: #fff7ed;
+        color: #c2410c;
+      }
+
+      /* =========================================================
+   AI BANNER
+========================================================= */
+
+      .ai-banner {
+        background: linear-gradient(135deg, #eff6ff, #f0fdfa);
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 13px;
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .ai-icon {
+        width: 35px;
+        height: 35px;
+        background: #2563eb;
+        color: white;
+        border-radius: 9px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 700;
+      }
+
+      .ai-banner-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: #1e40af;
+      }
+
+      .ai-banner-text {
+        font-size: 11px;
+        color: #475569;
+        margin-top: 3px;
+      }
+
+      /* =========================================================
+   CBG OPTIONS
+========================================================= */
+
+      .cbg-option {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      .cbg-option:hover {
+        border-color: #93c5fd;
+        background: #f8fbff;
+      }
+
+      .cbg-option.selected {
+        border: 2px solid var(--primary);
+        background: #eff6ff;
+      }
+
+      .cbg-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .cbg-code {
+        font-size: 14px;
+        font-weight: 800;
+        color: var(--dark);
+      }
+
+      .cbg-name {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .cbg-price {
+        text-align: right;
+      }
+
+      .price {
+        font-size: 15px;
+        font-weight: 800;
+        color: #15803d;
+      }
+
+      .price-label {
+        font-size: 10px;
+        color: var(--muted);
+      }
+
+      .confidence {
+        margin-top: 11px;
+      }
+
+      .confidence-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 5px;
+      }
+
+      .progress {
+        height: 6px;
+        background: #e2e8f0;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: #2563eb;
+        border-radius: 10px;
+      }
+
+      /* =========================================================
+   RIGHT PANEL
+========================================================= */
+
+      .selected-cbg {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 18px;
+      }
+
+      .selected-header {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .selected-code {
+        font-size: 18px;
+        font-weight: 800;
+        color: #1e3a8a;
+      }
+
+      .selected-name {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .tariff {
+        font-size: 20px;
+        color: #15803d;
+        font-weight: 800;
+      }
+
+      /* =========================================================
+   RECOMMENDATION
+========================================================= */
+
+      .recommendation {
+        border-radius: 10px;
+        padding: 14px;
+        margin-bottom: 10px;
+        border-left: 4px solid;
+        animation: fadeIn 0.25s ease;
+      }
+
+      .rec-success {
+        background: #f0fdf4;
+        border-color: #22c55e;
+      }
+
+      .rec-warning {
+        background: #fffbeb;
+        border-color: #f59e0b;
+      }
+
+      .rec-danger {
+        background: #fef2f2;
+        border-color: #ef4444;
+      }
+
+      .rec-title {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+
+      .rec-text {
+        font-size: 11px;
+        line-height: 1.6;
+        color: #475569;
+      }
+
+      /* =========================================================
+   THERAPY
+========================================================= */
+
+      .therapy-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .therapy-item:last-child {
+        border-bottom: 0;
+      }
+
+      .therapy-name {
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .therapy-detail {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+
+      .check {
+        color: #16a34a;
+        font-size: 15px;
+      }
+
+      /* =========================================================
+   SCORE
+========================================================= */
+
+      .score-box {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+      }
+
+      .score-circle {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        border: 7px solid #22c55e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 800;
+        color: #15803d;
+        transition: 0.3s;
+        flex-shrink: 0;
+      }
+
+      .score-title {
+        font-weight: 700;
+        color: var(--dark);
+        font-size: 13px;
+      }
+
+      .score-description {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* =========================================================
+   STATUS BADGE DYNAMIC
+========================================================= */
+
+      #claimStatus {
+        transition: 0.2s;
+      }
+
+      /* =========================================================
+   ACTION
+========================================================= */
+
+      .action-bar {
+        margin-top: 20px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      /* =========================================================
+   ANIMATION
+========================================================= */
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(3px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* =========================================================
+   RESPONSIVE
+========================================================= */
+
+      @media (max-width: 1000px) {
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .patient-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 650px) {
+        .container {
+          padding: 15px;
+        }
+
+        .visit-selector {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .patient-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header {
+          padding: 0 15px;
+        }
+
+        .ai-status {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- =====================================================
+     HEADER
+===================================================== -->
+
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">AI</div>
+
+        <div>
+          <div class="logo-title">AI Claim Validator</div>
+
+          <div class="logo-subtitle">Integrated RME • INA-CBG • Billing</div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="ai-status">
+          <span class="ai-dot"></span>
+
+          AI Engine Online
+        </div>
+
+        <div class="user">
+          <div>
+            <div style="font-size: 12px; font-weight: 700">Administrator</div>
+
+            <div style="font-size: 10px; color: #64748b">Claim Officer</div>
+          </div>
+
+          <div class="avatar">A</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- =================================================
+         TITLE
+    ================================================== -->
+
+      <div class="page-title">
+        <h1>AI Claim Validation</h1>
+
+        <p>
+          Analisis otomatis RME untuk rekomendasi diagnosis, prosedur, INA-CBG
+          dan validasi klaim.
+        </p>
+      </div>
+
+      <!-- =================================================
+         VISIT SELECTOR
+    ================================================== -->
+
+      <div class="visit-selector">
+        <div class="form-group">
+          <label> Nomor Visit / Episode </label>
+
+          <select id="visitSelect">
+            <option value="">-- Pilih Nomor Visit Pasien --</option>
+
+            <option value="VST-20260813-001">
+              VST-20260813-001 • Ahmad Fauzan
+            </option>
+
+            <option value="VST-20260813-002">
+              VST-20260813-002 • Budi Santoso
+            </option>
+
+            <option value="VST-20260813-003">
+              VST-20260813-003 • Siti Rahma
+            </option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" onclick="loadVisit()">
+          🔍 Analisis Visit
+        </button>
+      </div>
+
+      <!-- =================================================
+         CONTENT
+    ================================================== -->
+
+      <div id="claimContent" class="hidden">
+        <!-- =================================================
+             PATIENT CARD
+        ================================================== -->
+
+        <div class="patient-card">
+          <div class="patient-header">
+            <div class="patient-info">
+              <div class="patient-avatar">👤</div>
+
+              <div>
+                <div class="patient-name" id="patientName">Ahmad Fauzan</div>
+
+                <div class="patient-meta">
+                  No. RM: 00-12-45-78 • Visit: VST-20260813-001
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <span class="badge badge-green"> RME Lengkap </span>
+
+              <span class="badge badge-blue"> BPJS </span>
+            </div>
+          </div>
+
+          <div class="patient-grid">
+            <div class="info-box">
+              <div class="info-label">Tanggal</div>
+
+              <div class="info-value">13 Agustus 2026</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Dokter</div>
+
+              <div class="info-value">dr. Andi Pratama</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Poli</div>
+
+              <div class="info-value">Penyakit Dalam</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Status</div>
+
+              <div class="info-value">Siap Validasi</div>
+            </div>
+
+            <div class="info-box">
+              <div class="info-label">Penjamin</div>
+
+              <div class="info-value">BPJS Kesehatan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- =================================================
+             MAIN GRID
+        ================================================== -->
+
+        <div class="main-grid">
+          <!-- =================================================
+                 LEFT COLUMN
+            ================================================== -->
+
+          <div>
+            <!-- =============================================
+                     RME SUMMARY
+                ============================================== -->
+
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Ringkasan RME</div>
+
+                  <div class="card-subtitle">
+                    Data klinis yang dianalisis AI
+                  </div>
+                </div>
+
+                <span class="badge badge-blue"> AI Analyzed </span>
+              </div>
+
+              <div class="card-body">
+                <!-- DIAGNOSIS -->
+
+                <div class="section">
+                  <div class="section-title">Diagnosis</div>
+
+                  <div class="diagnosis">
+                    <div class="diagnosis-name">Pneumonia, unspecified</div>
+
+                    <div class="icd">J18.9</div>
+                  </div>
+
+                  <div class="diagnosis">
+                    <div class="diagnosis-name">Fever, unspecified</div>
+
+                    <div class="icd">R50.9</div>
+                  </div>
+                </div>
+
+                <!-- TINDAKAN -->
+
+                <div class="section">
+                  <div class="section-title">Tindakan / Prosedur</div>
+
+                  <div class="chip-container">
+                    <span class="chip"> Pemeriksaan Dokter </span>
+
+                    <span class="chip"> Injeksi </span>
+
+                    <span class="chip"> Pemeriksaan Laboratorium </span>
+
+                    <span class="chip"> Foto Thorax </span>
+
+                    <span class="chip green"> Rawat Inap </span>
+                  </div>
+                </div>
+
+                <!-- TERAPI -->
+
+                <div class="section">
+                  <div class="section-title">Terapi</div>
+
+                  <div class="chip-container">
+                    <span class="chip green"> Ceftriaxone </span>
+
+                    <span class="chip green"> Paracetamol </span>
+
+                    <span class="chip green"> Infus NaCl 0.9% </span>
+
+                    <span class="chip green"> Oksigen </span>
+                  </div>
+                </div>
+
+                <!-- PEMERIKSAAN -->
+
+                <div class="section">
+                  <div class="section-title">Pemeriksaan Penunjang</div>
+
+                  <div class="chip-container">
+                    <span class="chip orange"> Darah Lengkap </span>
+
+                    <span class="chip orange"> CRP </span>
+
+                    <span class="chip orange"> Foto Thorax </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- =============================================
+                     AI INA-CBG
+                ============================================== -->
+
+            <div class="card" style="margin-top: 20px">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">🤖 AI INA-CBG Recommendation</div>
+
+                  <div class="card-subtitle">Kandidat kode berdasarkan RME</div>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <!-- AI BANNER -->
+
+                <div class="ai-banner">
+                  <div class="ai-icon">AI</div>
+
+                  <div>
+                    <div class="ai-banner-title">
+                      AI menemukan 3 kandidat INA-CBG
+                    </div>
+
+                    <div class="ai-banner-text">
+                      Rekomendasi berdasarkan diagnosis, tindakan, terapi, LOS
+                      dan data RME.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- =================================
+                             CBG 1
+                        ================================== -->
+
+                <div
+                  class="cbg-option selected"
+                  data-cbg="minor"
+                  onclick="selectCBG(this)"
+                >
+                  <div class="cbg-top">
+                    <div>
+                      <div class="cbg-code">J-4-13-I</div>
+
+                      <div class="cbg-name">
+                        Pneumonia & Pleurisy, Minor Complexity
+                      </div>
+                    </div>
+
+                    <div class="cbg-price">
+                      <div class="price">Rp 4.850.000</div>
+
+                      <div class="price-label">Tarif INA-CBG</div>
+                    </div>
+                  </div>
+
+                  <div class="confidence">
+                    <div class="confidence-row">
+                      <span> AI Confidence </span>
+
+                      <strong> 92% </strong>
+                    </div>
+
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 92%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- =================================
+                             CBG 2
+                        ================================== -->
+
+                <div
+                  class="cbg-option"
+                  data-cbg="moderate"
+                  onclick="selectCBG(this)"
+                >
+                  <div class="cbg-top">
+                    <div>
+                      <div class="cbg-code">J-4-13-II</div>
+
+                      <div class="cbg-name">
+                        Pneumonia & Pleurisy, Moderate Complexity
+                      </div>
+                    </div>
+
+                    <div class="cbg-price">
+                      <div class="price">Rp 6.240.000</div>
+
+                      <div class="price-label">Tarif INA-CBG</div>
+                    </div>
+                  </div>
+
+                  <div class="confidence">
+                    <div class="confidence-row">
+                      <span> AI Confidence </span>
+
+                      <strong> 78% </strong>
+                    </div>
+
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 78%"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- =================================
+                             CBG 3
+                        ================================== -->
+
+                <div
+                  class="cbg-option"
+                  data-cbg="major"
+                  onclick="selectCBG(this)"
+                >
+                  <div class="cbg-top">
+                    <div>
+                      <div class="cbg-code">J-4-13-III</div>
+
+                      <div class="cbg-name">
+                        Pneumonia & Pleurisy, Major Complexity
+                      </div>
+                    </div>
+
+                    <div class="cbg-price">
+                      <div class="price">Rp 8.950.000</div>
+
+                      <div class="price-label">Tarif INA-CBG</div>
+                    </div>
+                  </div>
+
+                  <div class="confidence">
+                    <div class="confidence-row">
+                      <span> AI Confidence </span>
+
+                      <strong> 64% </strong>
+                    </div>
+
+                    <div class="progress">
+                      <div class="progress-bar" style="width: 64%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================
+                 RIGHT COLUMN
+            ================================================== -->
+
+          <div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Claim Validation</div>
+
+                  <div class="card-subtitle">Detail kandidat yang dipilih</div>
+                </div>
+
+                <span id="claimStatus" class="badge badge-green"> Valid </span>
+              </div>
+
+              <div class="card-body">
+                <!-- SELECTED CBG -->
+
+                <div class="selected-cbg">
+                  <div class="selected-header">
+                    <div>
+                      <div class="selected-code" id="selectedCode">
+                        J-4-13-I
+                      </div>
+
+                      <div class="selected-name" id="selectedName">
+                        Pneumonia & Pleurisy, Minor Complexity
+                      </div>
+                    </div>
+
+                    <div>
+                      <div class="tariff" id="selectedPrice">Rp 4.850.000</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- SCORE -->
+
+                <div class="score-box">
+                  <div class="score-circle" id="scoreCircle">92%</div>
+
+                  <div>
+                    <div class="score-title">Claim Readiness Score</div>
+
+                    <div class="score-description" id="scoreDescription">
+                      Data RME cukup untuk proses validasi klaim.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ======================================
+                             YANG SUDAH TERPENUHI
+                        ======================================= -->
+
+                <div class="section">
+                  <div class="section-title">Yang Sudah Terpenuhi</div>
+
+                  <div id="completedRecommendations">
+                    <div class="recommendation rec-success">
+                      <div class="rec-title">✓ Diagnosis</div>
+
+                      <div class="rec-text">
+                        Diagnosis utama dan sekunder telah tercatat pada RME.
+                      </div>
+                    </div>
+
+                    <div class="recommendation rec-success">
+                      <div class="rec-title">✓ Tindakan</div>
+
+                      <div class="rec-text">
+                        Tindakan medis telah ditemukan dan sesuai dengan
+                        kandidat CBG.
+                      </div>
+                    </div>
+
+                    <div class="recommendation rec-success">
+                      <div class="rec-title">✓ Terapi</div>
+
+                      <div class="rec-text">
+                        Terapi utama tersedia pada catatan pelayanan pasien.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ======================================
+                             REKOMENDASI AI
+                        ======================================= -->
+
+                <div class="section">
+                  <div class="section-title">Rekomendasi AI Sebelum Klaim</div>
+
+                  <div id="aiRecommendations">
+                    <!-- DEFAULT MINOR -->
+
+                    <div class="recommendation rec-success">
+                      <div class="rec-title">✓ Diagnosis Sesuai</div>
+
+                      <div class="rec-text">
+                        Diagnosis utama pneumonia telah sesuai dengan kandidat
+                        INA-CBG minor complexity.
+                      </div>
+                    </div>
+
+                    <div class="recommendation rec-success">
+                      <div class="rec-title">✓ Tindakan Terpenuhi</div>
+
+                      <div class="rec-text">
+                        Tindakan dokter, laboratorium dan radiologi telah
+                        ditemukan pada RME.
+                      </div>
+                    </div>
+
+                    <div class="recommendation rec-warning">
+                      <div class="rec-title">⚠ Verifikasi Hasil Radiologi</div>
+
+                      <div class="rec-text">
+                        Pastikan hasil foto thorax dan interpretasi radiologi
+                        telah final sebelum klaim.
+                      </div>
+                    </div>
+
+                    <div class="recommendation rec-warning">
+                      <div class="rec-title">⚠ Verifikasi LOS</div>
+
+                      <div class="rec-text">
+                        AI menyarankan verifikasi lama rawat terhadap episode
+                        pelayanan pasien.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ======================================
+                             TERAPI / TINDAKAN
+                        ======================================= -->
+
+                <div class="section">
+                  <div class="section-title">Terapi / Tindakan Terkait</div>
+
+                  <div id="therapyList">
+                    <div class="therapy-item">
+                      <div>
+                        <div class="therapy-name">Ceftriaxone 1 g</div>
+
+                        <div class="therapy-detail">IV • 2x sehari</div>
+                      </div>
+
+                      <div class="check">✓</div>
+                    </div>
+
+                    <div class="therapy-item">
+                      <div>
+                        <div class="therapy-name">Paracetamol</div>
+
+                        <div class="therapy-detail">IV • PRN</div>
+                      </div>
+
+                      <div class="check">✓</div>
+                    </div>
+
+                    <div class="therapy-item">
+                      <div>
+                        <div class="therapy-name">Foto Thorax</div>
+
+                        <div class="therapy-detail">Radiologi</div>
+                      </div>
+
+                      <div class="check">✓</div>
+                    </div>
+
+                    <div class="therapy-item">
+                      <div>
+                        <div class="therapy-name">
+                          Pemeriksaan Darah Lengkap
+                        </div>
+
+                        <div class="therapy-detail">Laboratorium</div>
+                      </div>
+
+                      <div class="check">✓</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ======================================
+                             ACTION
+                        ======================================= -->
+
+                <div class="action-bar">
+                  <button
+                    id="reanalyzeButton"
+                    class="btn btn-outline"
+                    onclick="reAnalyze()"
+                  >
+                    ↻ Re-Analyze AI
+                  </button>
+
+                  <button class="btn btn-success" onclick="approveClaim()">
+                    ✓ Setujui Kandidat
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      /* =========================================================
+   DUMMY VISIT DATA
+========================================================= */
+
+      const visitData = {
+        "VST-20260813-001": {
+          name: "Ahmad Fauzan",
+
+          rm: "00-12-45-78",
+
+          doctor: "dr. Andi Pratama",
+
+          poli: "Penyakit Dalam",
+        },
+
+        "VST-20260813-002": {
+          name: "Budi Santoso",
+
+          rm: "00-21-36-91",
+
+          doctor: "dr. Rina Sari",
+
+          poli: "Penyakit Dalam",
+        },
+
+        "VST-20260813-003": {
+          name: "Siti Rahma",
+
+          rm: "00-32-41-22",
+
+          doctor: "dr. Andi Pratama",
+
+          poli: "Penyakit Dalam",
+        },
+      };
+
+      /* =========================================================
+   DUMMY AI VALIDATION DATA
+========================================================= */
+
+      const cbgValidation = {
+        minor: {
+          score: 92,
+
+          status: "Valid",
+
+          statusClass: "badge-green",
+
+          description: "Data RME cukup untuk proses validasi klaim.",
+
+          recommendations: [
+            {
+              type: "success",
+              icon: "✓",
+              title: "Diagnosis Sesuai",
+              text: "Diagnosis utama pneumonia telah sesuai dengan kandidat INA-CBG minor complexity.",
+            },
+
+            {
+              type: "success",
+              icon: "✓",
+              title: "Tindakan Terpenuhi",
+              text: "Tindakan dokter, laboratorium dan radiologi telah ditemukan pada RME.",
+            },
+
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Verifikasi Hasil Radiologi",
+              text: "Pastikan hasil foto thorax dan interpretasi radiologi telah final sebelum klaim.",
+            },
+
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Verifikasi LOS",
+              text: "AI menyarankan verifikasi lama rawat terhadap episode pelayanan pasien.",
+            },
+          ],
+
+          therapy: [
+            {
+              name: "Ceftriaxone 1 g",
+              detail: "IV • 2x sehari",
+              status: "✓",
+            },
+
+            {
+              name: "Paracetamol",
+              detail: "IV • PRN",
+              status: "✓",
+            },
+
+            {
+              name: "Foto Thorax",
+              detail: "Radiologi",
+              status: "✓",
+            },
+
+            {
+              name: "Pemeriksaan Darah Lengkap",
+              detail: "Laboratorium",
+              status: "✓",
+            },
+          ],
+        },
+
+        moderate: {
+          score: 78,
+
+          status: "Perlu Review",
+
+          statusClass: "badge-orange",
+
+          description:
+            "Sebagian data tersedia, namun masih diperlukan verifikasi complexity.",
+
+          recommendations: [
+            {
+              type: "success",
+              icon: "✓",
+              title: "Diagnosis Utama Terdeteksi",
+              text: "Diagnosis pneumonia teridentifikasi dan memiliki hubungan dengan kandidat CBG.",
+            },
+
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Dokumentasi Severity",
+              text: "Pastikan dokumentasi tingkat keparahan dan kondisi klinis pasien mendukung complexity level.",
+            },
+
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Verifikasi Tindakan",
+              text: "AI menyarankan pemeriksaan kembali seluruh tindakan dan prosedur yang mendukung moderate complexity.",
+            },
+
+            {
+              type: "danger",
+              icon: "✕",
+              title: "Dokumentasi Belum Optimal",
+              text: "Beberapa data klinis belum cukup kuat untuk mendukung kandidat moderate complexity.",
+            },
+          ],
+
+          therapy: [
+            {
+              name: "Ceftriaxone 1 g",
+              detail: "IV • 2x sehari",
+              status: "✓",
+            },
+
+            {
+              name: "Paracetamol",
+              detail: "IV • PRN",
+              status: "✓",
+            },
+
+            {
+              name: "Foto Thorax",
+              detail: "Perlu Verifikasi",
+              status: "⚠",
+            },
+
+            {
+              name: "Pemeriksaan Darah Lengkap",
+              detail: "Laboratorium",
+              status: "✓",
+            },
+
+            {
+              name: "Dokumentasi Severity",
+              detail: "Perlu dilengkapi",
+              status: "⚠",
+            },
+          ],
+        },
+
+        major: {
+          score: 64,
+
+          status: "Review Manual",
+
+          statusClass: "badge-orange",
+
+          description:
+            "AI belum menemukan dukungan dokumentasi yang cukup untuk complexity mayor.",
+
+          recommendations: [
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Verifikasi Major Complexity",
+              text: "Kandidat major complexity membutuhkan dukungan dokumentasi klinis yang lebih kuat.",
+            },
+
+            {
+              type: "danger",
+              icon: "✕",
+              title: "Severity Belum Terverifikasi",
+              text: "AI belum menemukan dokumentasi yang cukup untuk mendukung tingkat kompleksitas mayor.",
+            },
+
+            {
+              type: "warning",
+              icon: "⚠",
+              title: "Review Prosedur",
+              text: "Periksa kembali tindakan, prosedur, pemeriksaan penunjang dan terapi yang mendukung kandidat ini.",
+            },
+
+            {
+              type: "danger",
+              icon: "✕",
+              title: "Review Sebelum Klaim",
+              text: "AI merekomendasikan verifikasi manual oleh coder atau claim officer sebelum kandidat digunakan.",
+            },
+          ],
+
+          therapy: [
+            {
+              name: "Ceftriaxone 1 g",
+              detail: "IV • 2x sehari",
+              status: "✓",
+            },
+
+            {
+              name: "Paracetamol",
+              detail: "IV • PRN",
+              status: "✓",
+            },
+
+            {
+              name: "Foto Thorax",
+              detail: "Perlu Review",
+              status: "⚠",
+            },
+
+            {
+              name: "Pemeriksaan Darah Lengkap",
+              detail: "Laboratorium",
+              status: "✓",
+            },
+
+            {
+              name: "Severity / Complexity",
+              detail: "Dokumentasi belum memadai",
+              status: "✕",
+            },
+          ],
+        },
+      };
+
+      /* =========================================================
+   LOAD VISIT
+========================================================= */
+
+      function loadVisit() {
+        const select = document.getElementById("visitSelect");
+
+        const visit = select.value;
+
+        if (!visit) {
+          alert("Silakan pilih nomor visit terlebih dahulu.");
+
+          return;
+        }
+
+        const data = visitData[visit];
+
+        document.getElementById("patientName").innerText = data.name;
+
+        document.getElementById("claimContent").classList.remove("hidden");
+
+        console.log("AI analyzing visit:", visit);
+      }
+
+      /* =========================================================
+   SELECT INA-CBG
+========================================================= */
+
+      function selectCBG(element) {
+        /* ---------------------------------------------
+       REMOVE ACTIVE
+    --------------------------------------------- */
+
+        document.querySelectorAll(".cbg-option").forEach((item) => {
+          item.classList.remove("selected");
+        });
+
+        /* ---------------------------------------------
+       ACTIVE ITEM
+    --------------------------------------------- */
+
+        element.classList.add("selected");
+
+        /* ---------------------------------------------
+       GET DATA
+    --------------------------------------------- */
+
+        const type = element.dataset.cbg;
+
+        const code = element.querySelector(".cbg-code").innerText;
+
+        const name = element.querySelector(".cbg-name").innerText;
+
+        const price = element.querySelector(".price").innerText;
+
+        const confidence = element
+          .querySelector(".confidence-row strong")
+          .innerText.replace("%", "");
+
+        /* ---------------------------------------------
+       UPDATE SELECTED CBG
+    --------------------------------------------- */
+
+        document.getElementById("selectedCode").innerText = code;
+
+        document.getElementById("selectedName").innerText = name;
+
+        document.getElementById("selectedPrice").innerText = price;
+
+        /* ---------------------------------------------
+       UPDATE SCORE
+    --------------------------------------------- */
+
+        updateScore(parseInt(confidence));
+
+        /* ---------------------------------------------
+       UPDATE VALIDATION
+    --------------------------------------------- */
+
+        updateValidation(type);
+
+        /* ---------------------------------------------
+       UPDATE THERAPY
+    --------------------------------------------- */
+
+        updateTherapy(type);
+      }
+
+      /* =========================================================
+   UPDATE VALIDATION
+========================================================= */
+
+      function updateValidation(type) {
+        const data = cbgValidation[type];
+
+        if (!data) {
+          return;
+        }
+
+        /* ---------------------------------------------
+       SCORE DESCRIPTION
+    --------------------------------------------- */
+
+        document.getElementById("scoreDescription").innerText =
+          data.description;
+
+        /* ---------------------------------------------
+       STATUS BADGE
+    --------------------------------------------- */
+
+        const status = document.getElementById("claimStatus");
+
+        status.className = "badge " + data.statusClass;
+
+        status.innerText = data.status;
+
+        /* ---------------------------------------------
+       AI RECOMMENDATION
+    --------------------------------------------- */
+
+        const container = document.getElementById("aiRecommendations");
+
+        container.innerHTML = data.recommendations
+          .map((item) => {
+            return `
+
+                <div
+                    class="recommendation rec-${item.type}">
+
+                    <div class="rec-title">
+
+                        ${item.icon}
+                        ${item.title}
+
+                    </div>
+
+                    <div class="rec-text">
+
+                        ${item.text}
+
+                    </div>
+
+                </div>
+
+            `;
+          })
+          .join("");
+      }
+
+      /* =========================================================
+   UPDATE THERAPY
+========================================================= */
+
+      function updateTherapy(type) {
+        const data = cbgValidation[type];
+
+        if (!data) {
+          return;
+        }
+
+        const container = document.getElementById("therapyList");
+
+        container.innerHTML = data.therapy
+          .map((item) => {
+            let icon = item.status;
+
+            return `
+
+                <div class="therapy-item">
+
+                    <div>
+
+                        <div class="therapy-name">
+                            ${item.name}
+                        </div>
+
+                        <div class="therapy-detail">
+                            ${item.detail}
+                        </div>
+
+                    </div>
+
+                    <div class="check">
+                        ${icon}
+                    </div>
+
+                </div>
+
+            `;
+          })
+          .join("");
+      }
+
+      /* =========================================================
+   UPDATE SCORE
+========================================================= */
+
+      function updateScore(score) {
+        const circle = document.getElementById("scoreCircle");
+
+        circle.innerText = score + "%";
+
+        /* ---------------------------------------------
+       GREEN
+    --------------------------------------------- */
+
+        if (score >= 80) {
+          circle.style.borderColor = "#22c55e";
+
+          circle.style.color = "#15803d";
+        } else if (score >= 70) {
+
+        /* ---------------------------------------------
+       ORANGE
+    --------------------------------------------- */
+          circle.style.borderColor = "#f59e0b";
+
+          circle.style.color = "#b45309";
+        } else {
+
+        /* ---------------------------------------------
+       RED
+    --------------------------------------------- */
+          circle.style.borderColor = "#ef4444";
+
+          circle.style.color = "#b91c1c";
+        }
+      }
+
+      /* =========================================================
+   RE-ANALYZE AI
+========================================================= */
+
+      function reAnalyze() {
+        const button = document.getElementById("reanalyzeButton");
+
+        const original = button.innerText;
+
+        button.innerText = "⏳ Analyzing...";
+
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.innerText = "✓ Analysis Updated";
+
+          setTimeout(() => {
+            button.innerText = original;
+
+            button.disabled = false;
+          }, 1000);
+        }, 1500);
+      }
+
+      /* =========================================================
+   APPROVE CLAIM
+========================================================= */
+
+      function approveClaim() {
+        const code = document.getElementById("selectedCode").innerText;
+
+        const price = document.getElementById("selectedPrice").innerText;
+
+        const score = document.getElementById("scoreCircle").innerText;
+
+        const status = document.getElementById("claimStatus").innerText;
+
+        alert(
+          "Kandidat INA-CBG disetujui.\n\n" +
+            "Kode: " +
+            code +
+            "\nTarif: " +
+            price +
+            "\nReadiness: " +
+            score +
+            "\nStatus: " +
+            status +
+            "\n\nStatus: Siap masuk proses klaim.",
+        );
+      }
+    </script>
+  </body>
+</html>

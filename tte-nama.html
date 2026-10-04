@@ -1,0 +1,2586 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>TTE Nama - TTE RME</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <style>
+      /* =========================================================
+           ROOT
+        ========================================================= */
+
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+
+        --text: #172033;
+        --text-soft: #475467;
+        --muted: #7a8699;
+
+        --background: #f5f7fb;
+        --white: #ffffff;
+
+        --border: #e7ebf2;
+
+        --success: #16a34a;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+
+        --sidebar: #101827;
+      }
+
+      /* =========================================================
+           RESET
+        ========================================================= */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      button,
+      input,
+      select {
+        font-family: inherit;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      /* =========================================================
+           APP
+        ========================================================= */
+
+      .app {
+        min-height: 100vh;
+      }
+
+      /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+      .sidebar {
+        width: 260px;
+
+        background: var(--sidebar);
+
+        color: white;
+
+        position: fixed;
+
+        inset: 0 auto 0 0;
+
+        display: flex;
+
+        flex-direction: column;
+
+        z-index: 1000;
+
+        transition: 0.3s ease;
+      }
+
+      /* BRAND */
+
+      .brand {
+        height: 85px;
+
+        padding: 0 25px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 11px;
+
+        background: linear-gradient(135deg, #2563eb, #4f8cff);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 18px;
+      }
+
+      .brand h2 {
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .brand span {
+        display: block;
+
+        color: #8793a7;
+
+        font-size: 9px;
+
+        margin-top: 2px;
+      }
+
+      /* NAVIGATION */
+
+      .navigation {
+        padding: 25px 14px;
+      }
+
+      .nav-label {
+        font-size: 9px;
+
+        color: #667085;
+
+        font-weight: 700;
+
+        letter-spacing: 1px;
+
+        padding: 12px 14px 9px;
+      }
+
+      .nav-item {
+        height: 45px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 0 14px;
+
+        margin: 3px 0;
+
+        color: #9da8bb;
+
+        border-radius: 9px;
+
+        font-size: 12px;
+
+        transition: 0.2s;
+      }
+
+      .nav-item i {
+        width: 18px;
+
+        text-align: center;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        color: white;
+
+        background: rgba(37, 99, 235, 0.16);
+      }
+
+      .nav-item.active {
+        border-left: 3px solid var(--primary);
+      }
+
+      .nav-badge {
+        margin-left: auto;
+
+        min-width: 22px;
+
+        height: 20px;
+
+        border-radius: 10px;
+
+        background: #2563eb;
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 9px;
+      }
+
+      /* SIDEBAR FOOTER */
+
+      .sidebar-footer {
+        margin-top: auto;
+
+        padding: 18px;
+      }
+
+      .security-status {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+
+        background: rgba(255, 255, 255, 0.03);
+
+        border-radius: 10px;
+
+        padding: 12px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+      }
+
+      .status-icon {
+        width: 31px;
+        height: 31px;
+
+        border-radius: 8px;
+
+        background: rgba(34, 197, 94, 0.12);
+
+        color: #4ade80;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+      }
+
+      .security-status strong {
+        display: block;
+
+        font-size: 10px;
+      }
+
+      .security-status span {
+        display: block;
+
+        color: #7f8a9d;
+
+        font-size: 8px;
+      }
+
+      .online-dot {
+        width: 7px;
+        height: 7px;
+
+        background: #22c55e;
+
+        border-radius: 50%;
+
+        margin-left: auto;
+      }
+
+      /* =========================================================
+           MAIN
+        ========================================================= */
+
+      .main {
+        margin-left: 260px;
+
+        width: calc(100% - 260px);
+
+        min-height: 100vh;
+      }
+
+      /* =========================================================
+           TOPBAR
+        ========================================================= */
+
+      .topbar {
+        height: 85px;
+
+        background: white;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 35px;
+
+        position: sticky;
+
+        top: 0;
+
+        z-index: 100;
+      }
+
+      .page-title h1 {
+        font-size: 20px;
+
+        letter-spacing: -0.4px;
+      }
+
+      .page-title p {
+        font-size: 10px;
+
+        color: var(--muted);
+
+        margin-top: 4px;
+      }
+
+      .top-actions {
+        display: flex;
+
+        align-items: center;
+
+        gap: 20px;
+      }
+
+      .icon-button {
+        width: 38px;
+        height: 38px;
+
+        background: #f5f7fa;
+
+        border-radius: 9px;
+
+        color: #536075;
+
+        position: relative;
+      }
+
+      .notification-dot {
+        position: absolute;
+
+        width: 6px;
+        height: 6px;
+
+        background: #ef4444;
+
+        border-radius: 50%;
+
+        top: 8px;
+        right: 9px;
+      }
+
+      .user-profile {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+      }
+
+      .avatar {
+        width: 37px;
+        height: 37px;
+
+        background: #dbeafe;
+
+        color: #2563eb;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 10px;
+
+        font-weight: 700;
+      }
+
+      .user-info strong {
+        display: block;
+
+        font-size: 10px;
+      }
+
+      .user-info span {
+        display: block;
+
+        color: var(--muted);
+
+        font-size: 8px;
+
+        margin-top: 2px;
+      }
+
+      /* =========================================================
+           CONTENT
+        ========================================================= */
+
+      .content {
+        padding: 30px 35px 45px;
+      }
+
+      /* =========================================================
+           BREADCRUMB
+        ========================================================= */
+
+      .breadcrumb {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        font-size: 9px;
+
+        color: #8993a3;
+
+        margin-bottom: 20px;
+      }
+
+      .breadcrumb a {
+        color: #64748b;
+      }
+
+      .breadcrumb i {
+        font-size: 7px;
+      }
+
+      .breadcrumb .current {
+        color: var(--primary);
+
+        font-weight: 600;
+      }
+
+      /* =========================================================
+           PAGE INTRO
+        ========================================================= */
+
+      .page-intro {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        margin-bottom: 25px;
+      }
+
+      .intro-left {
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+      }
+
+      .intro-icon {
+        width: 52px;
+        height: 52px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        border-radius: 13px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 21px;
+      }
+
+      .intro-text h2 {
+        font-size: 23px;
+
+        letter-spacing: -0.5px;
+      }
+
+      .intro-text p {
+        color: var(--muted);
+
+        font-size: 10px;
+
+        margin-top: 5px;
+      }
+
+      .method-badge {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        border-radius: 7px;
+
+        padding: 9px 12px;
+
+        font-size: 9px;
+
+        font-weight: 700;
+      }
+
+      /* =========================================================
+           STEP PROGRESS
+        ========================================================= */
+
+      .steps-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 12px;
+
+        padding: 17px 22px;
+
+        margin-bottom: 20px;
+      }
+
+      .steps {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+      }
+
+      .step {
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        color: #a0a9b7;
+
+        font-size: 9px;
+
+        font-weight: 600;
+      }
+
+      .step-circle {
+        width: 27px;
+        height: 27px;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        background: #f1f4f8;
+
+        color: #8893a4;
+
+        font-size: 9px;
+      }
+
+      .step.active {
+        color: var(--primary);
+      }
+
+      .step.active .step-circle {
+        background: var(--primary);
+
+        color: white;
+
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+      }
+
+      .step.done {
+        color: var(--success);
+      }
+
+      .step.done .step-circle {
+        background: #ecfdf5;
+
+        color: var(--success);
+      }
+
+      .step-line {
+        width: 80px;
+
+        height: 1px;
+
+        background: #e0e5ec;
+
+        margin: 0 12px;
+      }
+
+      /* =========================================================
+           MAIN GRID
+        ========================================================= */
+
+      .main-grid {
+        display: grid;
+
+        grid-template-columns: 1fr 330px;
+
+        gap: 20px;
+
+        align-items: start;
+      }
+
+      /* =========================================================
+           DOCUMENT PANEL
+        ========================================================= */
+
+      .panel {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 13px;
+
+        overflow: hidden;
+      }
+
+      .panel-header {
+        min-height: 60px;
+
+        padding: 0 20px;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .panel-title {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+      }
+
+      .panel-title-icon {
+        width: 31px;
+        height: 31px;
+
+        border-radius: 8px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 12px;
+      }
+
+      .panel-header h3 {
+        font-size: 12px;
+      }
+
+      .panel-header span {
+        font-size: 8px;
+
+        color: var(--muted);
+      }
+
+      /* DOCUMENT SELECT */
+
+      .document-selector {
+        padding: 20px;
+
+        border-bottom: 1px solid var(--border);
+      }
+
+      .field-label {
+        display: block;
+
+        font-size: 9px;
+
+        font-weight: 700;
+
+        color: #475467;
+
+        margin-bottom: 8px;
+      }
+
+      .select-wrapper {
+        position: relative;
+      }
+
+      .select-wrapper select {
+        width: 100%;
+
+        height: 43px;
+
+        border: 1px solid #dfe4eb;
+
+        border-radius: 8px;
+
+        background: white;
+
+        color: #344054;
+
+        font-size: 10px;
+
+        padding: 0 40px 0 13px;
+
+        appearance: none;
+
+        outline: none;
+      }
+
+      .select-wrapper select:focus {
+        border-color: var(--primary);
+
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+      }
+
+      .select-arrow {
+        position: absolute;
+
+        right: 14px;
+
+        top: 50%;
+
+        transform: translateY(-50%);
+
+        color: #8a94a4;
+
+        pointer-events: none;
+
+        font-size: 9px;
+      }
+
+      /* DOCUMENT PREVIEW */
+
+      .document-preview {
+        padding: 20px;
+
+        background: #f8fafc;
+      }
+
+      .document-paper {
+        background: white;
+
+        border: 1px solid #e1e6ed;
+
+        border-radius: 8px;
+
+        min-height: 480px;
+
+        box-shadow: 0 5px 18px rgba(31, 52, 88, 0.04);
+
+        overflow: hidden;
+      }
+
+      .document-paper-header {
+        padding: 20px 24px;
+
+        border-bottom: 1px solid #edf0f4;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+      }
+
+      .hospital-brand {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+      }
+
+      .hospital-logo {
+        width: 34px;
+        height: 34px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        border-radius: 8px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hospital-name strong {
+        display: block;
+
+        font-size: 10px;
+      }
+
+      .hospital-name span {
+        display: block;
+
+        font-size: 7px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .document-type {
+        font-size: 8px;
+
+        color: #667085;
+
+        background: #f5f7fa;
+
+        padding: 6px 8px;
+
+        border-radius: 5px;
+      }
+
+      .paper-body {
+        padding: 25px;
+      }
+
+      .paper-title {
+        text-align: center;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        margin-bottom: 22px;
+      }
+
+      .patient-info {
+        display: grid;
+
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 12px;
+
+        margin-bottom: 22px;
+
+        padding-bottom: 18px;
+
+        border-bottom: 1px solid #edf0f4;
+      }
+
+      .info-item label {
+        display: block;
+
+        color: #98a2b3;
+
+        font-size: 7px;
+
+        margin-bottom: 4px;
+      }
+
+      .info-item strong {
+        font-size: 9px;
+
+        font-weight: 600;
+
+        color: #344054;
+      }
+
+      .soap-section {
+        margin-bottom: 17px;
+      }
+
+      .soap-title {
+        font-size: 9px;
+
+        font-weight: 700;
+
+        color: var(--primary);
+
+        margin-bottom: 7px;
+      }
+
+      .soap-text {
+        height: 8px;
+
+        background: #edf1f5;
+
+        border-radius: 4px;
+
+        margin-bottom: 5px;
+      }
+
+      .soap-text.short {
+        width: 65%;
+      }
+
+      .soap-text.medium {
+        width: 82%;
+      }
+
+      .paper-footer {
+        margin-top: 25px;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: flex-end;
+      }
+
+      .doctor-info {
+        font-size: 8px;
+
+        color: #667085;
+      }
+
+      .signature-preview {
+        width: 170px;
+
+        text-align: center;
+      }
+
+      .signature-line {
+        border-bottom: 1px solid #98a2b3;
+
+        margin-bottom: 7px;
+      }
+
+      .signature-name {
+        font-size: 8px;
+
+        font-weight: 700;
+      }
+
+      .signature-role {
+        font-size: 7px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      /* =========================================================
+           RIGHT PANEL
+        ========================================================= */
+
+      .side-panel {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 15px;
+      }
+
+      /* USER CARD */
+
+      .signer-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 13px;
+
+        padding: 18px;
+      }
+
+      .signer-header {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        margin-bottom: 17px;
+      }
+
+      .signer-avatar {
+        width: 43px;
+        height: 43px;
+
+        border-radius: 50%;
+
+        background: #dbeafe;
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 11px;
+
+        font-weight: 700;
+      }
+
+      .signer-header strong {
+        display: block;
+
+        font-size: 11px;
+      }
+
+      .signer-header span {
+        display: block;
+
+        font-size: 8px;
+
+        color: var(--muted);
+
+        margin-top: 3px;
+      }
+
+      .verified-badge {
+        margin-left: auto;
+
+        width: 22px;
+        height: 22px;
+
+        background: #ecfdf5;
+
+        color: var(--success);
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 9px;
+      }
+
+      .identity-row {
+        display: flex;
+
+        justify-content: space-between;
+
+        padding: 9px 0;
+
+        border-top: 1px solid #f0f2f5;
+
+        font-size: 8px;
+      }
+
+      .identity-row span {
+        color: #98a2b3;
+      }
+
+      .identity-row strong {
+        color: #475467;
+
+        font-weight: 600;
+
+        text-align: right;
+      }
+
+      /* AUTHENTICATION */
+
+      .auth-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 13px;
+
+        padding: 18px;
+      }
+
+      .auth-title {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        margin-bottom: 15px;
+      }
+
+      .auth-title-icon {
+        width: 30px;
+        height: 30px;
+
+        border-radius: 8px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 11px;
+      }
+
+      .auth-title h3 {
+        font-size: 11px;
+      }
+
+      .auth-title span {
+        display: block;
+
+        font-size: 7px;
+
+        color: var(--muted);
+
+        margin-top: 2px;
+      }
+
+      .auth-method {
+        border: 1px solid #e5e9ef;
+
+        border-radius: 8px;
+
+        padding: 11px;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        margin-bottom: 9px;
+
+        cursor: pointer;
+
+        transition: 0.2s;
+      }
+
+      .auth-method:hover {
+        border-color: #c7d6f7;
+
+        background: #f8faff;
+      }
+
+      .auth-method.selected {
+        border-color: var(--primary);
+
+        background: #f5f8ff;
+      }
+
+      .auth-radio {
+        width: 16px;
+        height: 16px;
+
+        border: 1px solid #cbd3df;
+
+        border-radius: 50%;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+      }
+
+      .auth-method.selected .auth-radio {
+        border-color: var(--primary);
+      }
+
+      .auth-method.selected .auth-radio::after {
+        content: "";
+
+        width: 8px;
+        height: 8px;
+
+        background: var(--primary);
+
+        border-radius: 50%;
+      }
+
+      .auth-method-icon {
+        width: 29px;
+        height: 29px;
+
+        border-radius: 7px;
+
+        background: #f1f5f9;
+
+        color: #64748b;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 10px;
+      }
+
+      .auth-method-text strong {
+        display: block;
+
+        font-size: 9px;
+      }
+
+      .auth-method-text span {
+        display: block;
+
+        color: #98a2b3;
+
+        font-size: 7px;
+
+        margin-top: 2px;
+      }
+
+      /* ACTION */
+
+      .action-card {
+        background: white;
+
+        border: 1px solid var(--border);
+
+        border-radius: 13px;
+
+        padding: 18px;
+      }
+
+      .secure-note {
+        display: flex;
+
+        gap: 8px;
+
+        padding: 10px;
+
+        background: #f0fdf4;
+
+        border-radius: 7px;
+
+        margin-bottom: 14px;
+      }
+
+      .secure-note i {
+        color: var(--success);
+
+        font-size: 10px;
+
+        margin-top: 1px;
+      }
+
+      .secure-note p {
+        font-size: 7px;
+
+        line-height: 1.5;
+
+        color: #527261;
+      }
+
+      .sign-button {
+        width: 100%;
+
+        height: 43px;
+
+        border-radius: 8px;
+
+        background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+        color: white;
+
+        font-size: 9px;
+
+        font-weight: 700;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.18);
+
+        transition: 0.2s;
+      }
+
+      .sign-button:hover {
+        transform: translateY(-1px);
+
+        box-shadow: 0 9px 20px rgba(37, 99, 235, 0.25);
+      }
+
+      .sign-button:disabled {
+        opacity: 0.65;
+
+        cursor: not-allowed;
+
+        transform: none;
+      }
+
+      .back-button {
+        width: 100%;
+
+        height: 39px;
+
+        border-radius: 8px;
+
+        background: #f5f7fa;
+
+        color: #667085;
+
+        font-size: 9px;
+
+        font-weight: 600;
+
+        margin-top: 8px;
+      }
+
+      /* =========================================================
+           MODAL AUTH
+        ========================================================= */
+
+      .modal-overlay {
+        position: fixed;
+
+        inset: 0;
+
+        background: rgba(15, 23, 42, 0.55);
+
+        backdrop-filter: blur(4px);
+
+        display: none;
+
+        align-items: center;
+        justify-content: center;
+
+        z-index: 3000;
+      }
+
+      .modal-overlay.show {
+        display: flex;
+      }
+
+      .modal {
+        width: 400px;
+
+        max-width: calc(100% - 30px);
+
+        background: white;
+
+        border-radius: 16px;
+
+        padding: 28px;
+
+        text-align: center;
+
+        position: relative;
+
+        animation: modalIn 0.25s ease;
+      }
+
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+
+          transform: translateY(15px) scale(0.98);
+        }
+
+        to {
+          opacity: 1;
+
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .modal-close {
+        position: absolute;
+
+        right: 14px;
+        top: 14px;
+
+        width: 30px;
+        height: 30px;
+
+        border-radius: 50%;
+
+        background: #f4f6f9;
+
+        color: #667085;
+      }
+
+      .modal-icon {
+        width: 58px;
+        height: 58px;
+
+        margin: 0 auto 13px;
+
+        border-radius: 14px;
+
+        background: #eff6ff;
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 22px;
+      }
+
+      .modal h2 {
+        font-size: 19px;
+      }
+
+      .modal > p {
+        font-size: 9px;
+
+        color: var(--muted);
+
+        line-height: 1.6;
+
+        margin: 8px 20px 20px;
+      }
+
+      .pin-label {
+        display: block;
+
+        text-align: left;
+
+        font-size: 9px;
+
+        font-weight: 700;
+
+        color: #475467;
+
+        margin-bottom: 7px;
+      }
+
+      .pin-input {
+        width: 100%;
+
+        height: 45px;
+
+        border: 1px solid #dfe4eb;
+
+        border-radius: 8px;
+
+        text-align: center;
+
+        letter-spacing: 8px;
+
+        font-size: 17px;
+
+        outline: none;
+      }
+
+      .pin-input:focus {
+        border-color: var(--primary);
+
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+      }
+
+      .modal-actions {
+        display: flex;
+
+        gap: 8px;
+
+        margin-top: 15px;
+      }
+
+      .modal-btn {
+        flex: 1;
+
+        height: 40px;
+
+        border-radius: 8px;
+
+        font-size: 9px;
+
+        font-weight: 700;
+      }
+
+      .modal-cancel {
+        background: #f5f7fa;
+
+        color: #667085;
+      }
+
+      .modal-confirm {
+        background: var(--primary);
+
+        color: white;
+      }
+
+      /* =========================================================
+           SUCCESS
+        ========================================================= */
+
+      .success-modal {
+        display: none;
+      }
+
+      .success-modal.show {
+        display: block;
+      }
+
+      .auth-form.hide {
+        display: none;
+      }
+
+      .success-icon-large {
+        width: 65px;
+        height: 65px;
+
+        margin: 0 auto 15px;
+
+        border-radius: 50%;
+
+        background: #ecfdf5;
+
+        color: var(--success);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 26px;
+
+        animation: successPop 0.35s ease;
+      }
+
+      @keyframes successPop {
+        from {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .success-details {
+        background: #f8fafc;
+
+        border-radius: 8px;
+
+        padding: 12px;
+
+        margin: 15px 0;
+
+        text-align: left;
+      }
+
+      .success-row {
+        display: flex;
+
+        justify-content: space-between;
+
+        font-size: 8px;
+
+        padding: 5px 0;
+      }
+
+      .success-row span {
+        color: #98a2b3;
+      }
+
+      .success-row strong {
+        color: #475467;
+      }
+
+      .success-close {
+        width: 100%;
+
+        height: 40px;
+
+        border-radius: 8px;
+
+        background: var(--success);
+
+        color: white;
+
+        font-size: 9px;
+
+        font-weight: 700;
+      }
+
+      /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+      .mobile-menu {
+        display: none;
+      }
+
+      @media (max-width: 1150px) {
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .side-panel {
+          display: grid;
+
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .action-card {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 850px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
+        .main {
+          margin-left: 0;
+
+          width: 100%;
+        }
+
+        .mobile-menu {
+          display: flex;
+
+          width: 36px;
+          height: 36px;
+
+          align-items: center;
+          justify-content: center;
+
+          background: #f5f7fa;
+
+          border-radius: 8px;
+
+          color: #536075;
+
+          cursor: pointer;
+        }
+
+        .topbar {
+          padding: 0 18px;
+
+          gap: 10px;
+        }
+
+        .page-title {
+          margin-right: auto;
+        }
+
+        .page-title h1 {
+          font-size: 16px;
+        }
+
+        .page-title p {
+          display: none;
+        }
+
+        .user-info {
+          display: none;
+        }
+
+        .content {
+          padding: 20px;
+        }
+
+        .page-intro {
+          align-items: flex-start;
+
+          flex-direction: column;
+
+          gap: 15px;
+        }
+
+        .steps {
+          overflow-x: auto;
+
+          justify-content: flex-start;
+
+          padding-bottom: 2px;
+        }
+
+        .step {
+          white-space: nowrap;
+        }
+
+        .step-line {
+          min-width: 40px;
+
+          width: 40px;
+        }
+
+        .side-panel {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 550px) {
+        .patient-info {
+          grid-template-columns: 1fr;
+        }
+
+        .paper-body {
+          padding: 18px;
+        }
+
+        .document-paper-header {
+          padding: 15px;
+        }
+
+        .paper-footer {
+          flex-direction: column;
+
+          align-items: flex-start;
+
+          gap: 25px;
+        }
+
+        .top-actions {
+          gap: 8px;
+        }
+
+        .icon-button {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app">
+      <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-icon">
+            <i class="fa-solid fa-file-signature"></i>
+          </div>
+
+          <div>
+            <h2>TTE RME</h2>
+
+            <span> Digital Signature </span>
+          </div>
+        </div>
+
+        <nav class="navigation">
+          <div class="nav-label">MAIN MENU</div>
+
+          <a href="index.html" class="nav-item">
+            <i class="fa-solid fa-table-columns"></i>
+
+            <span> Dashboard </span>
+          </a>
+
+          <a href="dokumen-rme.html" class="nav-item">
+            <i class="fa-solid fa-file-medical"></i>
+
+            <span> Dokumen RME </span>
+
+            <span class="nav-badge"> 32 </span>
+          </a>
+
+          <a href="#" class="nav-item active">
+            <i class="fa-solid fa-signature"></i>
+
+            <span> Proses TTE </span>
+          </a>
+
+          <a href="#" class="nav-item">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            <span> Riwayat TTE </span>
+          </a>
+
+          <div class="nav-label">MANAGEMENT</div>
+
+          <a href="#" class="nav-item">
+            <i class="fa-solid fa-user-doctor"></i>
+
+            <span> Profil Pengguna </span>
+          </a>
+
+          <a href="#" class="nav-item">
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span> Keamanan </span>
+          </a>
+
+          <a href="#" class="nav-item">
+            <i class="fa-solid fa-gear"></i>
+
+            <span> Pengaturan </span>
+          </a>
+        </nav>
+
+        <div class="sidebar-footer">
+          <div class="security-status">
+            <div class="status-icon">
+              <i class="fa-solid fa-shield-check"></i>
+            </div>
+
+            <div>
+              <strong> System Secure </strong>
+
+              <span> TTE Service Online </span>
+            </div>
+
+            <span class="online-dot"></span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- =========================================================
+         MAIN
+    ========================================================== -->
+
+      <main class="main">
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+          <div class="mobile-menu" onclick="toggleSidebar()">
+            <i class="fa-solid fa-bars"></i>
+          </div>
+
+          <div class="page-title">
+            <h1>TTE Nama</h1>
+
+            <p>Simple Electronic Signature</p>
+          </div>
+
+          <div class="top-actions">
+            <button class="icon-button">
+              <i class="fa-regular fa-bell"></i>
+
+              <span class="notification-dot"></span>
+            </button>
+
+            <div class="user-profile">
+              <div class="avatar">DR</div>
+
+              <div class="user-info">
+                <strong> Dr. Rahmat, Sp.PD </strong>
+
+                <span> Dokter </span>
+              </div>
+
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+        </header>
+
+        <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+        <section class="content">
+          <!-- BREADCRUMB -->
+
+          <div class="breadcrumb">
+            <a href="index.html"> Dashboard </a>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <span> TTE </span>
+
+            <i class="fa-solid fa-chevron-right"></i>
+
+            <span class="current"> TTE Nama </span>
+          </div>
+
+          <!-- INTRO -->
+
+          <div class="page-intro">
+            <div class="intro-left">
+              <div class="intro-icon">
+                <i class="fa-solid fa-signature"></i>
+              </div>
+
+              <div class="intro-text">
+                <h2>TTE Nama</h2>
+
+                <p>
+                  Tanda tangan elektronik menggunakan identitas pengguna yang
+                  terautentikasi.
+                </p>
+              </div>
+            </div>
+
+            <div class="method-badge">
+              <i class="fa-solid fa-shield-check"></i>
+
+              Simple Electronic Signature
+            </div>
+          </div>
+
+          <!-- =================================================
+                 STEPS
+            ================================================== -->
+
+          <div class="steps-card">
+            <div class="steps">
+              <div class="step active">
+                <div class="step-circle">1</div>
+
+                <span> Pilih Dokumen </span>
+              </div>
+
+              <div class="step-line"></div>
+
+              <div class="step">
+                <div class="step-circle">2</div>
+
+                <span> Review </span>
+              </div>
+
+              <div class="step-line"></div>
+
+              <div class="step">
+                <div class="step-circle">3</div>
+
+                <span> Autentikasi </span>
+              </div>
+
+              <div class="step-line"></div>
+
+              <div class="step">
+                <div class="step-circle">4</div>
+
+                <span> Selesai </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- =================================================
+                 MAIN GRID
+            ================================================== -->
+
+          <div class="main-grid">
+            <!-- =============================================
+                     DOCUMENT
+                ============================================== -->
+
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">
+                  <div class="panel-title-icon">
+                    <i class="fa-solid fa-file-medical"></i>
+                  </div>
+
+                  <div>
+                    <h3>Dokumen RME</h3>
+
+                    <span> Pilih dokumen yang akan ditandatangani </span>
+                  </div>
+                </div>
+
+                <span> STEP 01 </span>
+              </div>
+
+              <!-- SELECT DOCUMENT -->
+
+              <div class="document-selector">
+                <label class="field-label">
+                  Dokumen yang akan ditandatangani
+                </label>
+
+                <div class="select-wrapper">
+                  <select id="documentSelect" onchange="changeDocument()">
+                    <option value="">-- Pilih Dokumen RME --</option>
+
+                    <option value="cppt">
+                      CPPT - Catatan Perkembangan Pasien
+                    </option>
+
+                    <option value="soap">SOAP Dokter - Rawat Jalan</option>
+
+                    <option value="resume">Resume Medis Pasien</option>
+
+                    <option value="assessment">Assessment Dokter</option>
+                  </select>
+
+                  <i class="fa-solid fa-chevron-down select-arrow"></i>
+                </div>
+              </div>
+
+              <!-- DOCUMENT PREVIEW -->
+
+              <div class="document-preview">
+                <div class="document-paper">
+                  <!-- PAPER HEADER -->
+
+                  <div class="document-paper-header">
+                    <div class="hospital-brand">
+                      <div class="hospital-logo">
+                        <i class="fa-solid fa-hospital"></i>
+                      </div>
+
+                      <div class="hospital-name">
+                        <strong> RS NUSA TIRTA </strong>
+
+                        <span> Sistem Rekam Medis Elektronik </span>
+                      </div>
+                    </div>
+
+                    <span class="document-type"> DOKUMEN RME </span>
+                  </div>
+
+                  <!-- PAPER BODY -->
+
+                  <div class="paper-body">
+                    <div class="paper-title" id="documentTitle">
+                      CATATAN PERKEMBANGAN PASIEN
+                    </div>
+
+                    <!-- PATIENT -->
+
+                    <div class="patient-info">
+                      <div class="info-item">
+                        <label> NAMA PASIEN </label>
+
+                        <strong> Budi Santoso </strong>
+                      </div>
+
+                      <div class="info-item">
+                        <label> NO. REKAM MEDIS </label>
+
+                        <strong> RM-2026-001245 </strong>
+                      </div>
+
+                      <div class="info-item">
+                        <label> TANGGAL LAHIR </label>
+
+                        <strong> 14 Februari 1985 </strong>
+                      </div>
+
+                      <div class="info-item">
+                        <label> TANGGAL PELAYANAN </label>
+
+                        <strong> 13 Agustus 2026 </strong>
+                      </div>
+                    </div>
+
+                    <!-- S -->
+
+                    <div class="soap-section">
+                      <div class="soap-title">SUBJECTIVE</div>
+
+                      <div class="soap-text"></div>
+
+                      <div class="soap-text medium"></div>
+
+                      <div class="soap-text short"></div>
+                    </div>
+
+                    <!-- O -->
+
+                    <div class="soap-section">
+                      <div class="soap-title">OBJECTIVE</div>
+
+                      <div class="soap-text medium"></div>
+
+                      <div class="soap-text"></div>
+
+                      <div class="soap-text short"></div>
+                    </div>
+
+                    <!-- A -->
+
+                    <div class="soap-section">
+                      <div class="soap-title">ASSESSMENT</div>
+
+                      <div class="soap-text"></div>
+
+                      <div class="soap-text short"></div>
+                    </div>
+
+                    <!-- P -->
+
+                    <div class="soap-section">
+                      <div class="soap-title">PLAN</div>
+
+                      <div class="soap-text medium"></div>
+
+                      <div class="soap-text"></div>
+
+                      <div class="soap-text short"></div>
+                    </div>
+
+                    <!-- SIGNATURE -->
+
+                    <div class="paper-footer">
+                      <div class="doctor-info">
+                        Dokumen dibuat secara elektronik<br />
+
+                        melalui Sistem RME
+                      </div>
+
+                      <div class="signature-preview">
+                        <div class="signature-line"></div>
+
+                        <div class="signature-name">Dr. Rahmat, Sp.PD</div>
+
+                        <div class="signature-role">
+                          Dokter Penanggung Jawab
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- =============================================
+                     RIGHT SIDE
+                ============================================== -->
+
+            <div class="side-panel">
+              <!-- SIGNER -->
+
+              <div class="signer-card">
+                <div class="signer-header">
+                  <div class="signer-avatar">DR</div>
+
+                  <div>
+                    <strong> Dr. Rahmat, Sp.PD </strong>
+
+                    <span> Dokter Penanggung Jawab </span>
+                  </div>
+
+                  <div class="verified-badge">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                </div>
+
+                <div class="identity-row">
+                  <span> NIK / ID Pengguna </span>
+
+                  <strong> DOC-001245 </strong>
+                </div>
+
+                <div class="identity-row">
+                  <span> Unit </span>
+
+                  <strong> Poli Penyakit Dalam </strong>
+                </div>
+
+                <div class="identity-row">
+                  <span> Status </span>
+
+                  <strong style="color: #16a34a"> Terverifikasi </strong>
+                </div>
+              </div>
+
+              <!-- AUTHENTICATION -->
+
+              <div class="auth-card">
+                <div class="auth-title">
+                  <div class="auth-title-icon">
+                    <i class="fa-solid fa-lock"></i>
+                  </div>
+
+                  <div>
+                    <h3>Metode Autentikasi</h3>
+
+                    <span> Pilih metode verifikasi </span>
+                  </div>
+                </div>
+
+                <!-- PASSWORD -->
+
+                <div
+                  class="auth-method selected"
+                  onclick="selectAuth(this, 'password')"
+                >
+                  <div class="auth-radio"></div>
+
+                  <div class="auth-method-icon">
+                    <i class="fa-solid fa-key"></i>
+                  </div>
+
+                  <div class="auth-method-text">
+                    <strong> Password / PIN </strong>
+
+                    <span> Verifikasi menggunakan PIN TTE </span>
+                  </div>
+                </div>
+
+                <!-- OTP -->
+
+                <div class="auth-method" onclick="selectAuth(this, 'otp')">
+                  <div class="auth-radio"></div>
+
+                  <div class="auth-method-icon">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                  </div>
+
+                  <div class="auth-method-text">
+                    <strong> OTP </strong>
+
+                    <span> Kode OTP ke perangkat terdaftar </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ACTION -->
+
+              <div class="action-card">
+                <div class="secure-note">
+                  <i class="fa-solid fa-shield-halved"></i>
+
+                  <p>
+                    Dengan melanjutkan proses TTE, Anda menyatakan bahwa dokumen
+                    telah diperiksa dan siap ditandatangani.
+                  </p>
+                </div>
+
+                <button
+                  class="sign-button"
+                  id="signButton"
+                  onclick="startSigning()"
+                >
+                  <i class="fa-solid fa-signature"></i>
+
+                  TANDA TANGANI DOKUMEN
+                </button>
+
+                <button
+                  class="back-button"
+                  onclick="window.location.href = 'index.html'"
+                >
+                  <i class="fa-solid fa-arrow-left"></i>
+
+                  Kembali
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- =============================================================
+     AUTH MODAL
+============================================================== -->
+
+    <div class="modal-overlay" id="authModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeAuthModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- AUTH FORM -->
+
+        <div class="auth-form" id="authForm">
+          <div class="modal-icon">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+
+          <h2>Verifikasi TTE</h2>
+
+          <p>Masukkan PIN untuk mengonfirmasi tanda tangan elektronik Anda.</p>
+
+          <label class="pin-label"> PIN TTE </label>
+
+          <input
+            type="password"
+            class="pin-input"
+            id="pinInput"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="••••••"
+          />
+
+          <div class="modal-actions">
+            <button class="modal-btn modal-cancel" onclick="closeAuthModal()">
+              Batal
+            </button>
+
+            <button
+              class="modal-btn modal-confirm"
+              onclick="confirmSignature()"
+            >
+              Konfirmasi TTE
+            </button>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+
+        <div class="success-modal" id="successModal">
+          <div class="success-icon-large">
+            <i class="fa-solid fa-check"></i>
+          </div>
+
+          <h2>TTE Berhasil</h2>
+
+          <p>Dokumen RME berhasil ditandatangani secara elektronik.</p>
+
+          <div class="success-details">
+            <div class="success-row">
+              <span> Dokumen </span>
+
+              <strong id="successDocument"> CPPT </strong>
+            </div>
+
+            <div class="success-row">
+              <span> Penandatangan </span>
+
+              <strong> Dr. Rahmat, Sp.PD </strong>
+            </div>
+
+            <div class="success-row">
+              <span> Metode </span>
+
+              <strong> TTE Nama </strong>
+            </div>
+
+            <div class="success-row">
+              <span> Waktu </span>
+
+              <strong id="successTime"> - </strong>
+            </div>
+          </div>
+
+          <button class="success-close" onclick="finishSigning()">
+            <i class="fa-solid fa-file-circle-check"></i>
+
+            SELESAI
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* =========================================================
+       GLOBAL
+    ========================================================= */
+
+      let selectedAuth = "password";
+
+      /* =========================================================
+       DOCUMENT CHANGE
+    ========================================================= */
+
+      function changeDocument() {
+        const select = document.getElementById("documentSelect");
+
+        const title = document.getElementById("documentTitle");
+
+        const titles = {
+          cppt: "CATATAN PERKEMBANGAN PASIEN",
+
+          soap: "SOAP DOKTER - RAWAT JALAN",
+
+          resume: "RESUME MEDIS PASIEN",
+
+          assessment: "ASSESSMENT DOKTER",
+        };
+
+        const value = select.value;
+
+        if (titles[value]) {
+          title.textContent = titles[value];
+        }
+      }
+
+      /* =========================================================
+       SELECT AUTH
+    ========================================================= */
+
+      function selectAuth(element, method) {
+        document.querySelectorAll(".auth-method").forEach((item) => {
+          item.classList.remove("selected");
+        });
+
+        element.classList.add("selected");
+
+        selectedAuth = method;
+      }
+
+      /* =========================================================
+       START SIGNING
+    ========================================================= */
+
+      function startSigning() {
+        const documentSelect = document.getElementById("documentSelect");
+
+        if (!documentSelect.value) {
+          alert("Silakan pilih dokumen RME terlebih dahulu.");
+
+          documentSelect.focus();
+
+          return;
+        }
+
+        if (selectedAuth === "otp") {
+          alert("OTP akan dikirim ke perangkat yang telah terdaftar.");
+
+          return;
+        }
+
+        document.getElementById("authModal").classList.add("show");
+
+        setTimeout(() => {
+          document.getElementById("pinInput").focus();
+        }, 200);
+      }
+
+      /* =========================================================
+       CONFIRM SIGNATURE
+    ========================================================= */
+
+      function confirmSignature() {
+        const pin = document.getElementById("pinInput").value;
+
+        if (!pin) {
+          alert("Silakan masukkan PIN TTE.");
+
+          return;
+        }
+
+        if (pin.length < 4) {
+          alert("PIN harus minimal 4 digit.");
+
+          return;
+        }
+
+        const button = document.getElementById("signButton");
+
+        button.disabled = true;
+
+        button.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin"></i> MEMPROSES TTE...';
+
+        setTimeout(() => {
+          showSuccess();
+
+          button.disabled = false;
+
+          button.innerHTML =
+            '<i class="fa-solid fa-signature"></i> TANDA TANGANI DOKUMEN';
+        }, 1500);
+      }
+
+      /* =========================================================
+       SHOW SUCCESS
+    ========================================================= */
+
+      function showSuccess() {
+        const select = document.getElementById("documentSelect");
+
+        const selectedText = select.options[select.selectedIndex].text;
+
+        document.getElementById("successDocument").textContent = selectedText;
+
+        const now = new Date();
+
+        document.getElementById("successTime").textContent =
+          now.toLocaleString("id-ID");
+
+        document.getElementById("authForm").classList.add("hide");
+
+        document.getElementById("successModal").classList.add("show");
+      }
+
+      /* =========================================================
+       CLOSE AUTH MODAL
+    ========================================================= */
+
+      function closeAuthModal() {
+        document.getElementById("authModal").classList.remove("show");
+
+        document.getElementById("pinInput").value = "";
+      }
+
+      /* =========================================================
+       FINISH
+    ========================================================= */
+
+      function finishSigning() {
+        closeAuthModal();
+
+        document.getElementById("authForm").classList.remove("hide");
+
+        document.getElementById("successModal").classList.remove("show");
+
+        document.getElementById("pinInput").value = "";
+
+        /*
+         * Untuk implementasi real:
+         *
+         * window.location.href =
+         *     "dokumen-rme.html";
+         */
+      }
+
+      /* =========================================================
+       MOBILE SIDEBAR
+    ========================================================= */
+
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+      }
+
+      /* =========================================================
+       CLOSE MODAL OUTSIDE
+    ========================================================= */
+
+      document
+        .getElementById("authModal")
+        .addEventListener("click", function (event) {
+          if (event.target === this) {
+            closeAuthModal();
+          }
+        });
+
+      /* =========================================================
+       ESCAPE
+    ========================================================= */
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeAuthModal();
+        }
+      });
+
+      /* =========================================================
+       ENTER PIN
+    ========================================================= */
+
+      document
+        .getElementById("pinInput")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Enter") {
+            confirmSignature();
+          }
+        });
+    </script>
+  </body>
+</html>
